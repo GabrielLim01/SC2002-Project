@@ -10,14 +10,14 @@ public class Patient extends User {
 
     // These variables may need to be local scope
     String input = "";
-    // int selector = 0;  selector DEFINITELY needs to be local scope...
+    // int selector = 0;    selector DEFINITELY needs to be local scope...
     boolean isValidSelectionType = true;
 
     // attributes
     private int patientID;
     private String name;
     private LocalDate dateOfBirth;
-    private char gender; //can be M (male), F (female, or O (other)
+    private char gender; //can be M (male), F (female), or O (other)
     private int phoneNo;
     private String email;
     private String bloodType; //it cannot simply be char, because of Rh protein (e.g. O+ / O- blood type)
