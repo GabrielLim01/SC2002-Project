@@ -1,8 +1,10 @@
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.time.*;
 
 public class HMSApp {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Validator validator = new Validator();
         String username, password;
@@ -11,20 +13,22 @@ public class HMSApp {
 
         // FOR TESTING PURPOSES
         Patient patient = new Patient(1, "John", "01 Jan 2001", 'F', 12345678, "john@gmail.com", "O+");
+        // ArrayList<Patient> patients = new ArrayList<Patient>();
+        // patients.add(new Patient(1, "John", "01 Jan 2001", 'F', 12345678, "john@gmail.com", "O+"));
 
         System.out.println("Welcome to the Hospital Management System! Please input your user credentials:");
         do {
             System.out.print("USERNAME: ");
             username = scanner.nextLine();
             isValidLoginCredential = validator.validateCredential(username, "username");
-        }  while (!isValidLoginCredential);
+        } while (!isValidLoginCredential);
         do {
             System.out.print("PASSWORD: ");
             password = scanner.nextLine();
             isValidLoginCredential = validator.validateCredential(password, "password");
-        }  while (!isValidLoginCredential);
+        } while (!isValidLoginCredential);
 
-        if (username.equals("User1234") && password.equals("Pass1234")){
+        if (username.equals("User1234") && password.equals("Pass1234")) {
             System.out.println("You have successfully authenticated, congratulations!");
 
             // TO-DO:
