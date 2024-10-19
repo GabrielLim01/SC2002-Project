@@ -6,13 +6,13 @@ public class Appointment {
     private Patient patient;
     private Doctor doctor;
     private LocalDate date;
-    private LocalDateTime time;
+    private LocalTime time;
 
     // default constructor
     public Appointment(){}
 
     // standard constructor
-    public Appointment(Patient patient, Doctor doctor, LocalDate date, LocalDateTime time){
+    public Appointment(Patient patient, Doctor doctor, LocalDate date, LocalTime time){
         this.patient = patient;
         this.doctor = doctor;
         this.date = date;
@@ -31,7 +31,7 @@ public class Appointment {
         return date;
     }
 
-    public LocalDateTime getTime() {
+    public LocalTime getTime() {
         return time;
     }
 
@@ -47,7 +47,7 @@ public class Appointment {
         this.date = date;
     }
 
-    public void setTime(LocalDateTime time) {
+    public void setTime(LocalTime time) {
         this.time = time;
     }
 

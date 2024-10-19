@@ -14,7 +14,7 @@ public class Patient extends User {
     boolean isValidSelectionType = true;
 
     // attributes
-    private int patientID;
+    private String id;
     private String name;
     private LocalDate dateOfBirth;
     private char gender; //can be M (male), F (female), or O (other)
@@ -27,11 +27,9 @@ public class Patient extends User {
     public Patient() {
     }
 
-    ;
-
     // standard constructor
-    public Patient(int patientID, String name, String dateOfBirth, char gender, int phoneNo, String email, String bloodType) {
-        this.patientID = patientID;
+    public Patient(String id, String name, String dateOfBirth, char gender, int phoneNo, String email, String bloodType) {
+        this.id = id;
         this.name = name;
         this.dateOfBirth = LocalDate.parse(dateOfBirth, dateTimeFormatter);
         this.gender = gender;
@@ -41,8 +39,8 @@ public class Patient extends User {
         this.role = Roles.PATIENT.toString();
     }
 
-    public int getPatientID() {
-        return patientID;
+    public String getId() {
+        return id;
     }
 
     public String getName() {
@@ -73,8 +71,8 @@ public class Patient extends User {
         return role;
     }
 
-    public void setPatientID(int patientID) {
-        this.patientID = patientID;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setName(String name) {
@@ -134,7 +132,7 @@ public class Patient extends User {
 
     public void viewMedicalRecord(Patient patient) {
         System.out.println("\nYour medical details are as follows:");
-        System.out.println("Patient ID: " + patient.getPatientID());
+        System.out.println("Patient ID: " + patient.getId());
         System.out.println("Name: " + patient.getName());
         System.out.println("Date Of Birth: " + patient.getDateOfBirth());
         System.out.println("Gender: " + patient.getGender());

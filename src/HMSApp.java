@@ -12,7 +12,7 @@ public class HMSApp {
         boolean isLoggedOut = false;
 
         // FOR TESTING PURPOSES
-        Patient patient = new Patient(1, "John", "01 Jan 2001", 'F', 12345678, "john@gmail.com", "O+");
+        Patient patient = new Patient("1", "John", "01 Jan 2001", 'F', 12345678, "john@gmail.com", "O+");
         // ArrayList<Patient> patients = new ArrayList<Patient>();
         // patients.add(new Patient(1, "John", "01 Jan 2001", 'F', 12345678, "john@gmail.com", "O+"));
 

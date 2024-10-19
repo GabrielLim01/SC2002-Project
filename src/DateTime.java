@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class DateTime {
     public DateTime(){}
 
-    public ArrayList<String> generateDateTime(){
+    public ArrayList<String> generateTimeSlots(){
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM uuuu"); // e.g. 01 Jan 2001
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a"); // e.g. 8:00 am
 
