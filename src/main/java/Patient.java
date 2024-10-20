@@ -17,10 +17,10 @@ public class Patient extends User {
     private String id;
     private String name;
     private LocalDate dateOfBirth;
-    private char gender; //can be M (male), F (female), or O (other)
+    private char gender; // can be M (male), F (female), or O (other)
     private int phoneNo;
     private String email;
-    private String bloodType; //it cannot simply be char, because of Rh protein (e.g. O+ / O- blood type)
+    private String bloodType; // it cannot simply be char, because of Rh protein (e.g. O+ / O- blood type)
     private String role;
 
     // default constructor
@@ -134,7 +134,7 @@ public class Patient extends User {
         System.out.println("\nYour medical details are as follows:");
         System.out.println("Patient ID: " + patient.getId());
         System.out.println("Name: " + patient.getName());
-        System.out.println("Date Of Birth: " + patient.getDateOfBirth());
+        System.out.println("Date Of Birth: " + patient.getDateOfBirth().format(dateTimeFormatter));
         System.out.println("Gender: " + patient.getGender());
         System.out.println("Phone Number: " + patient.getPhoneNo());
         System.out.println("Email: " + patient.getEmail());
