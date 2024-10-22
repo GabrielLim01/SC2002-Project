@@ -1,12 +1,6 @@
-import java.util.ArrayList;
+package Models;
 
 public class Doctor extends User {
-
-    public void login() {
-    }
-
-    public void logout() {
-    }
 
     // attributes
     private String id;
@@ -26,8 +20,8 @@ public class Doctor extends User {
         this.age = age;
     }
 
-//    public ArrayList<Doctor> generateDoctorData(){
-//        ArrayList<Doctor> listOfDoctors = new ArrayList<Doctor>();
+//    public ArrayList<Models.Doctor> generateDoctorData(){
+//        ArrayList<Models.Doctor> listOfDoctors = new ArrayList<Models.Doctor>();
 //
 //    }
 };

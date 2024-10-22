@@ -1,3 +1,6 @@
+package Utility;// THIS CLASS GENERATES THE DATES AND TIMES FOR THE APPOINTMENT CLASS
+// DATES AND TIMES ARE COMBINED INTO A "TIMESLOT"
+
 import java.time.format.DateTimeFormatter;
 import java.time.*;
 import java.util.stream.Stream;

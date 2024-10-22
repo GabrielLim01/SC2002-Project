@@ -1,3 +1,8 @@
+package Utility;
+
+import Models.Doctor;
+import Models.Patient;
+
 import java.time.*;
 
 public class Appointment {

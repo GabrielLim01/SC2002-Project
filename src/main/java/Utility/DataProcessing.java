@@ -1,3 +1,6 @@
+package Utility;
+
+import Models.Patient;
 import com.opencsv.*;
 
 import java.io.*;
@@ -50,10 +53,10 @@ public class DataProcessing {
         // dataList.forEach(System.out::println);
 
         // Expected output from Staff_List.csv
-        // [D001, John Smith, Doctor, Male, 45]
-        // [D002, Emily Clarke, Doctor, Female, 38]
-        // [P001, Mark Lee, Pharmacist, Male, 29]
-        // [A001, Sarah Lee, Administrator, Female, 40]
+        // [D001, John Smith, Models.Doctor, Male, 45]
+        // [D002, Emily Clarke, Models.Doctor, Female, 38]
+        // [P001, Mark Lee, Models.Pharmacist, Male, 29]
+        // [A001, Sarah Lee, Models.Administrator, Female, 40]
 
         return dataList;
     }

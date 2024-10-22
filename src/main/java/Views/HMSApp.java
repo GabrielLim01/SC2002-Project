@@ -1,6 +1,10 @@
+package Views;
+
+import Controllers.*;
+import Models.*;
+import Utility.*;
+
 import java.util.Scanner;
-import java.util.ArrayList;
-import java.time.*;
 
 public class HMSApp {
 
@@ -13,8 +17,9 @@ public class HMSApp {
 
         // FOR TESTING PURPOSES
         Patient patient = new Patient("1", "John", "01 Jan 2001", 'F', 12345678, "john@gmail.com", "O+");
-        // ArrayList<Patient> patients = new ArrayList<Patient>();
-        // patients.add(new Patient(1, "John", "01 Jan 2001", 'F', 12345678, "john@gmail.com", "O+"));
+        PatientController patientController = new PatientController();
+        // ArrayList<Models.Patient> patients = new ArrayList<Models.Patient>();
+        // patients.add(new Models.Patient(1, "John", "01 Jan 2001", 'F', 12345678, "john@gmail.com", "O+"));
 
         System.out.println("Welcome to the Hospital Management System! Please input your user credentials:");
         do {
@@ -36,10 +41,10 @@ public class HMSApp {
             // 2. Retrieve this user object
             // 3. Make the following code dynamic by displaying the appropriate user menu based on the user's role
             // (...does it have to be a switch statement based on role? Wouldn't the user object itself be enough?)
-            patient.displayMenu(patient);
+            patientController.displayMenu(patient);
 
         } else {
-            System.out.println("Oh snap! User login unsuccessful!");
+            System.out.println("Oh snap! Models.User login unsuccessful!");
         }
     }
 }
