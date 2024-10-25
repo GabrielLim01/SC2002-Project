@@ -1,6 +1,6 @@
 package Utility;
 
-import Models.Patient;
+import Models.*;
 import com.opencsv.*;
 
 import java.io.*;
@@ -98,5 +98,28 @@ public class DataProcessing {
 
         }
         return patientList;
+    }
+
+    public ArrayList<Doctor> generateDoctorList(ArrayList<String> dataList) {
+
+        ArrayList<Doctor> doctorList = new ArrayList<Doctor>();
+
+        for (int i = 0; i < dataList.size(); i++) {
+            String[] temp = dataList.get(i).substring(1, dataList.get(i).length() - 1).split(",");
+            String id = temp[0].trim();
+            String name = temp[1].trim();
+            char gender = 'M';
+            if (!temp[3].trim().equals("Male")) {
+                if (temp[3].trim().equals("Female")) {
+                    gender = 'F';
+                } else {
+                    gender = 'O';
+                }
+            }
+            int age = Integer.parseInt(temp[4].trim());
+            doctorList.add(new Doctor(id, name, gender, age));
+
+        }
+        return doctorList;
     }
 }

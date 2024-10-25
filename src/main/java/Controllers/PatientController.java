@@ -8,6 +8,10 @@ import java.time.format.DateTimeFormatter;
 
 public class PatientController extends UserController {
 
+    // default constructor
+    public PatientController() {
+    }
+
     // Objects and variables for data processing
     Scanner scanner = new Scanner(System.in);
     Validator validator = new Validator();
