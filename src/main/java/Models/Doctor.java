@@ -1,5 +1,7 @@
 package Models;
 
+import java.util.ArrayList;
+
 public class Doctor extends User {
 
     // attributes
@@ -8,18 +10,20 @@ public class Doctor extends User {
     private char gender; //can be M (male), F (female), or O (other)
     private int age;
     private String role;
+    private ArrayList<String> availability;
 
     // default constructor
     public Doctor() {
     }
 
     // standard constructor
-    public Doctor(String id, String name, char gender, int age) {
+    public Doctor(String id, String name, char gender, int age, ArrayList<String> availability) {
         this.id = id;
         this.name = name;
         this.gender = gender;
         this.age = age;
         this.role = Roles.DOCTOR.toString();
+        this.availability = availability;
     }
 
     public String getId() {
@@ -60,5 +64,13 @@ public class Doctor extends User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public ArrayList<String> getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(ArrayList<String> availability) {
+        this.availability = availability;
     }
 };

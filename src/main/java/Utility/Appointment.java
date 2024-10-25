@@ -1,9 +1,13 @@
+// should this class be split into Appointment and AppointmentController ???
+
 package Utility;
 
 import Models.Doctor;
 import Models.Patient;
+import Controllers.*;
 
 import java.time.*;
+import java.util.ArrayList;
 
 public class Appointment {
 
@@ -56,9 +60,15 @@ public class Appointment {
         this.time = time;
     }
 
-    // View which doctors' appointment slots are available
-    public void viewAvailAppts(){
+    // Instantiated classes
+    DoctorController doctorController = new DoctorController();
 
+    // View which doctors' appointment slots are available
+    public void viewAvailAppts(Patient patient, ArrayList<Doctor> doctorList){
+        doctorController.viewPersonalSchedulesOfAllDoctors(doctorList);
+
+        // missing additional logic here to prompt the user whether they would like to book an appointment or not
+        // then scheduleAppt()
     }
 
     // Choose a doctor, date and available timeslot to schedule an appointment

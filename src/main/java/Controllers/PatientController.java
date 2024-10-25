@@ -1,8 +1,10 @@
 package Controllers;
 
+import Models.Doctor;
 import Models.Patient;
-import Utility.Validator;
+import Utility.*;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
 
@@ -17,21 +19,29 @@ public class PatientController extends UserController {
     Validator validator = new Validator();
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM uuuu");
 
+    // Instantiating other classes
+    // DoctorController doctorController = new DoctorController();
+    Appointment appointment = new Appointment();
+
     // These variables may need to be local scope
     String input = "";
     boolean isValidSelectionType = true;
 
     // @Override
-    public void displayMenu(Patient patient) {
+    // I would rather not have to take in parameters for this method if possible
+    public void displayMenu(Patient patient, ArrayList<Doctor> doctorList) {
         int selector = 0;
+        final int MAX_MENU_RANGE = 4;
+
         do {
             do {
                 System.out.println("\nWelcome back! What would you like to do today?");
                 System.out.println("1. View Medical Record");
                 System.out.println("2. Update Personal Info");
-                System.out.println("3. Exit");
+                System.out.println("3. Schedule An Appointment");
+                System.out.println("4. Exit");
                 input = scanner.nextLine();
-                isValidSelectionType = validator.validateSelectorInput(input, 1, 3);
+                isValidSelectionType = validator.validateSelectorInput(input, 1, MAX_MENU_RANGE);
             } while (!isValidSelectionType);
 
             selector = Integer.parseInt(input);
@@ -43,9 +53,12 @@ public class PatientController extends UserController {
                     updatePersonalInfo(patient);
                     break;
                 case 3:
-                    break; //this can be return too, doesn't matter, although it will make the while (selector != 3) redundant
+                    appointment.viewAvailAppts(patient, doctorList); // do we even need an appointment class?
+                    break;
+                case 4:
+                    break; //this can be return too, doesn't matter, although it will make the while (selector != MAX_MENU_RANGE) redundant
             }
-        } while (selector != 3);
+        } while (selector != MAX_MENU_RANGE);
     }
 
     public void viewMedicalRecord(Patient patient) {
@@ -63,6 +76,7 @@ public class PatientController extends UserController {
     // Permitted editable fields: Phone number and email
     public void updatePersonalInfo(Patient patient) {
         int selector = 0;
+        final int MAX_MENU_RANGE = 3;
         do {
             do {
                 System.out.println("\nPlease select what field you would like to edit, or input 3 to return to the previous menu:");
@@ -70,7 +84,7 @@ public class PatientController extends UserController {
                 System.out.println("2. Email");
                 System.out.println("3. Exit");
                 input = scanner.nextLine();
-                isValidSelectionType = validator.validateSelectorInput(input, 1, 3);
+                isValidSelectionType = validator.validateSelectorInput(input, 1, MAX_MENU_RANGE);
             } while (!isValidSelectionType);
 
             selector = Integer.parseInt(input);
@@ -94,8 +108,17 @@ public class PatientController extends UserController {
                 case 3:
                     break;
             }
-        } while (selector != 3);
+        } while (selector != MAX_MENU_RANGE);
     }
+
+    // should these appointment methods be in an Appointment class instead?
+    // see, the problem with the implementation now is, now this method and every parent method that calls this method
+    // now requires a doctorList object as a parameter, in addition to instantiating a doctorController at the start of the class
+    // too much logic for just the patientController class??
+
+//    public void scheduleAppointment(Patient patient, ArrayList<Doctor> doctorList){
+//        doctorController.viewPersonalSchedulesOfAllDoctors(doctorList);
+//    }
 
     public void login() {
     }

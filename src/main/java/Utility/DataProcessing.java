@@ -1,3 +1,7 @@
+// THIS CLASS HANDLES THE FOLLOWING
+// 1. READING FROM A CSV FILE, INTO AN ARRAYLIST<STRING>
+// 2. GENERATING DATA FOR THE VARIOUS USER CLASSES BASED ON THE READ DATA, INTO AN ARRAYLIST<OBJECT>
+
 package Utility;
 
 import Models.*;
@@ -13,6 +17,9 @@ public class DataProcessing {
     // formatters for date conversion
     DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd");
     DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd MMM uuuu");
+
+    // for timeslot generation
+    DateTime dt = new DateTime();
 
     // default constructor
     public DataProcessing() {
@@ -117,7 +124,7 @@ public class DataProcessing {
                 }
             }
             int age = Integer.parseInt(temp[4].trim());
-            doctorList.add(new Doctor(id, name, gender, age));
+            doctorList.add(new Doctor(id, name, gender, age, dt.generateTimeSlots()));
 
         }
         return doctorList;
