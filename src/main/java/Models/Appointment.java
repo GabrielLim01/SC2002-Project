@@ -2,6 +2,8 @@ package Models;
 
 import java.time.*;
 
+
+
 public class Appointment {
 
     // attributes
@@ -12,15 +14,16 @@ public class Appointment {
 //    private LocalTime time;
 
     // (Oct 27, 2024 update)
-    // I am making these Strings because I don't want to add in the conversion/formatting to String codes every time
+    // I am making these Strings because I don't want to add in the conversion/formatting from LocalDate/Time <-> String every time
     private String date;
     private String time;
+    private String status;
 
     private enum Status {
         INACTIVE,
         PENDING,
         CONFIRMED,
-        CANCELLED,                  // should this be REJECTED instead??
+        CANCELLED,            // should this be REJECTED instead??
         COMPLETED
     }
 
@@ -35,6 +38,7 @@ public class Appointment {
         this.doctor = doctor;
         this.date = date;
         this.time = time;
+        this.status = Status.INACTIVE.toString();
     }
 
     public int getId() {
@@ -65,6 +69,10 @@ public class Appointment {
         return time;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -93,4 +101,7 @@ public class Appointment {
         this.time = time;
     }
 
+    public String editStatus() {
+        return status;
+    }
 }

@@ -130,11 +130,14 @@ public class DataProcessing {
         return doctorList;
     }
 
-    // this is like what, INNER JOIN of two tables in SQL context?
-    // basically the doctors don't have their availability variable initialized at runtime because it has to wait
+
+    // this method is like what, INNER JOIN of two tables in SQL context?
+    // basically the doctors don't have their availability variable initialized at runtime because they have to wait
     // for the appointments list to generate first, only after that can they be updated with their appointments timeslots
     // ,which is what this method is doing
-    // might be more efficient with arraylist of arraylists???
+
+    // Might be more efficient with arraylist of arraylists???
+
     public void updateDoctorsListWithAppointments(ArrayList<Doctor> doctorsList, ArrayList<Appointment> appointmentsList) {
         for (int i = 0; i < doctorsList.size(); i++) {
 
