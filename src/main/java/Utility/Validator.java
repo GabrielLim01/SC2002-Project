@@ -32,7 +32,7 @@ public class Validator {
         if (!m.matches()){
             System.out.println("Your " + fieldType + " is invalid! Please try again!");
         }
-        // Return if the username matches the regex
+        // Return true if the username matches the regex
         return m.matches();
     }
 
@@ -51,6 +51,7 @@ public class Validator {
         }
     }
 
+    // NOT USED YET
     public boolean validateStringInput(String input, String fieldType)
     {
         // Regex to check if the username or password is valid
@@ -74,6 +75,31 @@ public class Validator {
             System.out.println("Your " + fieldType + " is invalid! Please try again!");
         }
         // Return if the username matches the regex
+        return m.matches();
+    }
+
+    // Used to validate Yes or No (Y/N) user responses
+    public boolean validateCharacterInput(String input)
+    {
+        // If input is empty, return false
+        if (input.isEmpty()) {
+            System.out.println("Please enter something, thank you.");
+            return false;
+        } else if (input.length() > 1){
+            System.out.println("Please do not enter more than one character, thank you.");
+            return false;
+        }
+
+        char firstChar = input.charAt(0);
+
+        // Check whether the input is either Y or N
+        Matcher m = Pattern.compile("^[YN]$").matcher(Character.toString(firstChar));
+
+        if (!m.matches()){
+            System.out.println("Please only input 'Y' or 'N', thank you.");
+        }
+
+        // Return true if the username matches the regex
         return m.matches();
     }
 }

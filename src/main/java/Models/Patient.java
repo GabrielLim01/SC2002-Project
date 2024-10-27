@@ -2,6 +2,7 @@ package Models;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class Patient extends User {
 
@@ -17,6 +18,7 @@ public class Patient extends User {
     private String email;
     private String bloodType; // it cannot simply be char, because of Rh protein (e.g. O+ / O- blood type)
     private String role;
+    private ArrayList<Appointment> appointments;
 
     // default constructor
     public Patient() {
@@ -32,6 +34,7 @@ public class Patient extends User {
         this.email = email;
         this.bloodType = bloodType;
         this.role = Roles.PATIENT.toString();
+        this.appointments = null;
     }
 
     public String getId() {
@@ -96,6 +99,14 @@ public class Patient extends User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public ArrayList<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(ArrayList<Appointment> appointments) {
+        this.appointments = appointments;
     }
 };
 

@@ -124,9 +124,28 @@ public class DataProcessing {
                 }
             }
             int age = Integer.parseInt(temp[4].trim());
-            doctorList.add(new Doctor(id, name, gender, age, dt.generateTimeSlots()));
+            doctorList.add(new Doctor(id, name, gender, age, null));
 
         }
         return doctorList;
+    }
+
+    // this is like what, INNER JOIN of two tables in SQL context?
+    // basically the doctors don't have their availability variable initialized at runtime because it has to wait
+    // for the appointments list to generate first, only after that can they be updated with their appointments timeslots
+    // ,which is what this method is doing
+    // might be more efficient with arraylist of arraylists???
+    public void updateDoctorsListWithAppointments(ArrayList<Doctor> doctorsList, ArrayList<Appointment> appointmentsList) {
+        for (int i = 0; i < doctorsList.size(); i++) {
+
+            ArrayList<Appointment> appointmentsListSubset = new ArrayList<Appointment>();
+
+            for (int j = 0; j < appointmentsList.size(); j++) {
+                if (doctorsList.get(i).getName().equals(appointmentsList.get(j).getDoctor().getName())) {
+                    appointmentsListSubset.add(appointmentsList.get(j));
+                }
+            }
+            doctorsList.get(i).setAvailability(appointmentsListSubset);
+        }
     }
 }

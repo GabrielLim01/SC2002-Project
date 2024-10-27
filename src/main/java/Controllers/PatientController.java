@@ -1,5 +1,6 @@
 package Controllers;
 
+import Models.Appointment;
 import Models.Doctor;
 import Models.Patient;
 import Utility.*;
@@ -21,15 +22,15 @@ public class PatientController extends UserController {
 
     // Instantiating other classes
     // DoctorController doctorController = new DoctorController();
-    Appointment appointment = new Appointment();
+    AppointmentPatientController appointmentPatientController = new AppointmentPatientController();
 
     // These variables may need to be local scope
     String input = "";
     boolean isValidSelectionType = true;
 
     // @Override
-    // I would rather not have to take in parameters for this method if possible
-    public void displayMenu(Patient patient, ArrayList<Doctor> doctorList) {
+    // I would rather not have to take in parameters for this method if possible, especially doctorList
+    public void displayMenu(Patient patient, ArrayList<Appointment> appointmentList) {
         int selector = 0;
         final int MAX_MENU_RANGE = 4;
 
@@ -53,7 +54,7 @@ public class PatientController extends UserController {
                     updatePersonalInfo(patient);
                     break;
                 case 3:
-                    appointment.viewAvailAppts(patient, doctorList); // do we even need an appointment class?
+                    appointmentPatientController.viewAvailAppts(patient, appointmentList); // do we even need an appointment class?
                     break;
                 case 4:
                     break; //this can be return too, doesn't matter, although it will make the while (selector != MAX_MENU_RANGE) redundant

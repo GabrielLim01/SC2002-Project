@@ -1,7 +1,13 @@
+// (Oct 27, 2024 update) Should the sole method in this class be moved to DataProcessing instead?
+
 // THIS CLASS GENERATES THE DATES AND TIMES FOR THE APPOINTMENT CLASS
 // DATES AND TIMES ARE COMBINED INTO A "TIMESLOT"
 
 package Utility;
+
+import Models.Appointment;
+import Models.Doctor;
+import Models.Patient;
 
 import java.time.format.DateTimeFormatter;
 import java.time.*;
@@ -13,7 +19,7 @@ public class DateTime {
     // default constructor
     public DateTime(){}
 
-    public ArrayList<String> generateTimeSlots(){
+    public ArrayList<Appointment> generateAppointmentList(ArrayList<Doctor> doctorList){
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM uuuu"); // e.g. 01 Jan 2001
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a"); // e.g. 8:00 am
 
@@ -27,33 +33,38 @@ public class DateTime {
         // (25/10/24 update) I changed endDate to a max duration of 1 day instead
         // Should be 8 normally
 
-        Stream<LocalDate> listOfDates = startDate.datesUntil(endDate);
+        Stream<LocalDate> datesList = startDate.datesUntil(endDate);
         //listOfDates.forEach(System.out::println);
 
         // Convert each LocalDate into a String and save into an arrayList
-        ArrayList<String> formattedListOfDates = new ArrayList<String>();
-        listOfDates.forEach(s -> formattedListOfDates.add(dateFormatter.format(s)));
+        ArrayList<String> formattedDatesList = new ArrayList<String>();
+        datesList.forEach(s -> formattedDatesList.add(dateFormatter.format(s)));
         // formattedListOfDates.forEach(System.out::println);
 
         // 2. TIME GENERATION (8am to 4pm)
         // (25/10/24 update) I changed this to a 4-hour duration instead to reduce console output printing length
         final int startHour = 8;
         final int endHour = 12; // should be 16 normally
-        ArrayList<String> listOfTimes = new ArrayList<String>();
+        ArrayList<String> timesList = new ArrayList<String>();
         for (int i = startHour; i < (endHour + 1); i++) {
-            listOfTimes.add(timeFormatter.format(LocalTime.MIDNIGHT.plusHours(i)));
+            timesList.add(timeFormatter.format(LocalTime.MIDNIGHT.plusHours(i)));
         }
         // listOfTimes.forEach(System.out::println);
 
-        // 3. DATE AND TIME IN ONE STRING
-        ArrayList<String> listOfTimeSlots = new ArrayList<String>();
-        for (int i=0; i < formattedListOfDates.size(); i++){
-            for (int j=0; j < listOfTimes.size(); j++){
-                listOfTimeSlots.add(formattedListOfDates.get(i) + " " + listOfTimes.get(j));
+        // 3. GENERATE APPOINTMENT TIMESLOTS DYNAMICALLY IN A TRIPLE NESTED FOR LOOP
+        // DOCTORS { DATES { TIMES { ... } } }
+        ArrayList<Appointment> appointmentsList = new ArrayList<Appointment>();
+        for (int i=0; i <doctorList.size(); i++){
+            for (int j=0; j < formattedDatesList.size(); j++){
+                for (int k=1; k < timesList.size() + 1; k++){
+                    appointmentsList.add(new Appointment(k, null, doctorList.get(i), formattedDatesList.get(j),
+                            timesList.get(k-1)));
+                }
             }
         }
+
         // listOfTimeSlots.forEach(System.out::println);
 
-        return listOfTimeSlots;
+        return appointmentsList;
     }
 }

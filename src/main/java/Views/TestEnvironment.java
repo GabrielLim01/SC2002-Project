@@ -10,6 +10,7 @@ public class TestEnvironment {
 
     public static void main(String[] args) {
         DataProcessing dp = new DataProcessing();
+        DateTime dt = new DateTime();
         PatientController patientController = new PatientController();
         DoctorController doctorController = new DoctorController();
 
@@ -17,8 +18,11 @@ public class TestEnvironment {
         // patientList.forEach(patient -> patientController.displayMenu(patient));
 
         ArrayList<Doctor> doctorList = dp.generateDoctorList(dp.readFromCSV("Doctor_List.csv"));
-        // doctorList.forEach(doctor -> doctorController.displayMenu(doctor));
 
-        patientController.displayMenu(patientList.get(0), doctorList);
+        ArrayList<Appointment> appointmentList = dt.generateAppointmentList(doctorList);
+        dp.updateDoctorsListWithAppointments(doctorList, appointmentList);
+
+        //patientController.displayMenu(patientList.get(0), appointmentList);
+        doctorList.forEach(doctor -> doctorController.displayMenu(doctor));
     }
 }

@@ -60,16 +60,21 @@ public class DoctorController extends UserController {
 
     public void viewPersonalSchedule(Doctor doctor){
         System.out.println("Hello, " + doctor.getName() + "! You are available at the following timeslots:");
-        doctor.getAvailability().forEach(System.out::println);
-    }
-
-    public void viewPersonalSchedulesOfAllDoctors(ArrayList<Doctor> doctorList){
-        for (int i = 0; i < doctorList.size(); i++) {
-            System.out.println(doctorList.get(i).getName() + " is available at the following timeslots:");
-            doctorList.get(i).getAvailability().forEach(System.out::println);
-            System.out.print("\n");
+        for (int i = 0; i < doctor.getAvailability().size(); i++) {
+            System.out.println(doctor.getAvailability().get(i).getDate() + " " +
+                    doctor.getAvailability().get(i).getTime()); // TO-DO - ADD APPOINTMENT STATUS FLAG TO THIS LATER TOO
         }
     }
+
+    // DEPRECATED
+    // Additional method not required in test cases
+//    public void viewPersonalSchedulesOfAllDoctors(ArrayList<Doctor> doctorList){
+//        for (int i = 0; i < doctorList.size(); i++) {
+//            System.out.println(doctorList.get(i).getName() + " is available at the following timeslots:");
+//            doctorList.get(i).getAvailability().forEach(System.out::println);
+//            System.out.print("\n");
+//        }
+//    }
 
     public void login() {
     }

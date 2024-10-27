@@ -10,14 +10,14 @@ public class Doctor extends User {
     private char gender; //can be M (male), F (female), or O (other)
     private int age;
     private String role;
-    private ArrayList<String> availability;
+    private ArrayList<Appointment> availability;
 
     // default constructor
     public Doctor() {
     }
 
     // standard constructor
-    public Doctor(String id, String name, char gender, int age, ArrayList<String> availability) {
+    public Doctor(String id, String name, char gender, int age, ArrayList<Appointment> availability) {
         this.id = id;
         this.name = name;
         this.gender = gender;
@@ -66,11 +66,11 @@ public class Doctor extends User {
         this.role = role;
     }
 
-    public ArrayList<String> getAvailability() {
+    public ArrayList<Appointment> getAvailability() {
         return availability;
     }
 
-    public void setAvailability(ArrayList<String> availability) {
+    public void setAvailability(ArrayList<Appointment> availability) {
         this.availability = availability;
     }
 };
