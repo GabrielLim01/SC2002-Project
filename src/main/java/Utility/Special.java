@@ -60,7 +60,7 @@ public class Special {
             selector = Integer.parseInt(input);
             switch (selector) {
                 case 1:
-                    patientController.displayMenu(patientList.get(0), appointmentList);
+                    patientController.displayMenu(patientList.get(0), doctorList, appointmentList);
                     break;
                 case 2:
                     doctorController.displayMenu(doctorList.get(0));

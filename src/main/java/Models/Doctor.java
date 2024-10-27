@@ -7,7 +7,7 @@ public class Doctor extends User {
     // attributes
     private String id;
     private String name;
-    private char gender; //can be M (male), F (female), or O (other)
+    private char gender; // can be M (male), F (female), or O (other)
     private int age;
     private String role;
     private ArrayList<Appointment> availability;

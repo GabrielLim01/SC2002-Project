@@ -1,3 +1,5 @@
+// This class handles input validation and exception/error handling, as well as printing error/invalid input messages
+
 package Utility;
 
 import java.util.regex.*;
@@ -8,8 +10,7 @@ public class Validator {
     public Validator(){}
 
     // TO-DO:
-    // 1. Shift invalid console output messages in here - handling this requires passing an additional fieldType variable as a method parameter
-    // 2. Handle validation logic for invalid username and/or password + corresponding output msg
+    // 1. Handle validation logic for incorrect username and/or password combination + corresponding output msg
     public boolean validateCredential(String input, String fieldType)
     {
         // Regex to check if the username or password is valid
@@ -51,7 +52,8 @@ public class Validator {
         }
     }
 
-    // NOT USED YET
+    // NOT IMPLEMENTED YET - INCOMPLETE
+    // Meant to be used in methods which require updating of fields that are user data-related (phone number, email etc.)
     public boolean validateStringInput(String input, String fieldType)
     {
         // Regex to check if the username or password is valid

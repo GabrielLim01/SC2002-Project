@@ -18,7 +18,7 @@ public class AppointmentPatientController
     Validator validator = new Validator();
 
     // View which doctors' appointment slots are available
-    public void viewAvailAppts(Patient patient, ArrayList<Appointment> appointmentList){
+    public void viewAvailAppts(Patient patient, ArrayList<Doctor> doctorsList, ArrayList<Appointment> appointmentList){
 
         // Should the following variables be local scope or global scope?
         String input = "";
@@ -41,12 +41,36 @@ public class AppointmentPatientController
         } while (!isValidInput);
 
         if (input.charAt(0) == 'Y'){
-            scheduleAppt();  // INCOMPLETE
+            scheduleAppt(doctorsList);  // INCOMPLETE
         }
     }
 
     // Choose a doctor, date and available timeslot to schedule an appointment
-    public void scheduleAppt(){
+    public void scheduleAppt(ArrayList<Doctor> doctorsList){
+        // Three approaches to booking
+        // bookByDoctor: Pick the doctor first, then see all their available appointment slots
+        // bookByDateAndTime: See which dates/timeslots are available (at least 1 doctor), only after that THEN pick a doctor
+        // bookByFullView: See a list of ALL doctors and ALL their available appointment slots to book from
+        // I will be implementing via bookByDoctor for now
+        bookApptByDoctor(doctorsList);
+        //bookByDateAndTime();
+        //bookApptByFullView();
+
+        // By the way, in HealthHub the booking system is modelled differently, the doctor you get is random and there is only
+        // one timeslot for each 15-min period released at 10pm? 12am? on the previous day
+    }
+
+    // see, just for this method to get doctorsList, I have to make its two parent methods, scheduleAppt and viewAvailAppts
+    // take in doctorsList as parameters
+    // would really like to avoid this way of passing data if possible but I'm not aware of any other way to do it for now
+    public void bookApptByDoctor(ArrayList<Doctor> doctorsList){
+        // Pick a doctor first
+        for (int i=0; i< doctorsList.size(); i++){
+            // WIP
+        }
+    }
+
+    public void bookApptByFullView(){
 
     }
 

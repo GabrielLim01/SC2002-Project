@@ -1,13 +1,13 @@
-// (Oct 27, 2024 update) Should the sole method in this class be moved to DataProcessing instead?
+// (Oct 27, 2024 update) Consider moving the sole method in this class to DataProcessing instead,
+// and then deleting this class
 
-// THIS CLASS GENERATES THE DATES AND TIMES FOR THE APPOINTMENT CLASS
-// DATES AND TIMES ARE COMBINED INTO A "TIMESLOT"
+// This class generates the dates and times for the Appointment class and related Controller classes
+// Dates and times are combined into a "Timeslot"
 
 package Utility;
 
 import Models.Appointment;
 import Models.Doctor;
-import Models.Patient;
 
 import java.time.format.DateTimeFormatter;
 import java.time.*;
@@ -25,31 +25,32 @@ public class DateTime {
 
         // TO-DO: Possibly combine date and time generation together
 
-        // TESTS SUCCESSFUL
-        // TESTING APPOINTMENT DATES AND TIMESLOTS DYNAMIC AUTO-GENERATION
         // 1. DATE GENERATION (1 week starting from tomorrow)
-        LocalDate startDate = LocalDate.now().plusDays(1);
-        LocalDate endDate = LocalDate.now().plusDays(2);
-        // (25/10/24 update) I changed endDate to a max duration of 1 day instead
+        // (Oct 25, 2024 update) I changed endDate to a max duration of 1 day instead
         // Should be 8 normally
+        LocalDate startDate = LocalDate.now().plusDays(1);
+        LocalDate endDate = LocalDate.now().plusDays(2); // should be 8 normally
 
         Stream<LocalDate> datesList = startDate.datesUntil(endDate);
-        //listOfDates.forEach(System.out::println);
+        // DEBUGGING
+        // datesList.forEach(System.out::println);
 
         // Convert each LocalDate into a String and save into an arrayList
         ArrayList<String> formattedDatesList = new ArrayList<String>();
         datesList.forEach(s -> formattedDatesList.add(dateFormatter.format(s)));
-        // formattedListOfDates.forEach(System.out::println);
+        // DEBUGGING
+        // formattedDatesList.forEach(System.out::println);
 
         // 2. TIME GENERATION (8am to 4pm)
-        // (25/10/24 update) I changed this to a 4-hour duration instead to reduce console output printing length
+        // (Oct 25, 2024 update) I changed the overall duration to 4 hours instead to reduce console output printing length
         final int startHour = 8;
         final int endHour = 12; // should be 16 normally
         ArrayList<String> timesList = new ArrayList<String>();
         for (int i = startHour; i < (endHour + 1); i++) {
             timesList.add(timeFormatter.format(LocalTime.MIDNIGHT.plusHours(i)));
         }
-        // listOfTimes.forEach(System.out::println);
+        // DEBUGGING
+        // timesList.forEach(System.out::println);
 
         // 3. GENERATE APPOINTMENT TIMESLOTS DYNAMICALLY IN A TRIPLE NESTED FOR LOOP
         // DOCTORS { DATES { TIMES { ... } } }
@@ -62,8 +63,6 @@ public class DateTime {
                 }
             }
         }
-
-        // listOfTimeSlots.forEach(System.out::println);
 
         return appointmentsList;
     }

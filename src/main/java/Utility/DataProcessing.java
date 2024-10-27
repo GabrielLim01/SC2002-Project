@@ -1,6 +1,8 @@
-// THIS CLASS HANDLES THE FOLLOWING
-// 1. READING FROM A CSV FILE, INTO AN ARRAYLIST<STRING>
-// 2. GENERATING DATA FOR THE VARIOUS USER CLASSES BASED ON THE READ DATA, INTO AN ARRAYLIST<OBJECT>
+// This class has the following methods
+// 1. readFromCSV generic csv file reading method, returns an ArrayList<String>
+// 2. ArrayList generation methods for the various user classes based on the contents of their respective csv files
+// 3. A method to update the Doctors' appointment availability attribute with an Appointment ArrayList, done after
+// their respective lists' generation
 
 package Utility;
 
@@ -14,18 +16,18 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 
 public class DataProcessing {
-    // formatters for date conversion
-    DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd");
-    DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd MMM uuuu");
-
-    // for timeslot generation
-    DateTime dt = new DateTime();
 
     // default constructor
     public DataProcessing() {
     }
 
-    // TEST FEATURE - Read from csv file, write into ArrayList and print entries
+    // formatters for date conversion
+    DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd");
+    DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd MMM uuuu");
+
+    // instantiated DateTime object for timeslot generation
+    DateTime dt = new DateTime();
+
     public ArrayList<String> readFromCSV(String fileName) {
 
         // getResourceAsStream tries to look for the file in the directory of the class it is invoked from, in this case, src
@@ -60,10 +62,10 @@ public class DataProcessing {
         // dataList.forEach(System.out::println);
 
         // Expected output from Staff_List.csv
-        // [D001, John Smith, Models.Doctor, Male, 45]
-        // [D002, Emily Clarke, Models.Doctor, Female, 38]
-        // [P001, Mark Lee, Models.Pharmacist, Male, 29]
-        // [A001, Sarah Lee, Models.Administrator, Female, 40]
+        // [D001, John Smith, Doctor, Male, 45]
+        // [D002, Emily Clarke, Doctor, Female, 38]
+        // [P001, Mark Lee, Pharmacist, Male, 29]
+        // [A001, Sarah Lee, Administrator, Female, 40]
 
         return dataList;
     }
@@ -97,12 +99,11 @@ public class DataProcessing {
                 }
             }
 
-            int phoneNo = 12345678;
+            int phoneNo = 12345678; // hardcoded for now, since they don't have their individual phone numbers in the csv file
             String bloodType = temp[4].trim();
             String email = temp[5].trim();
 
             patientList.add(new Patient(id, name, formattedDateOfBirth, gender, phoneNo, email, bloodType));
-
         }
         return patientList;
     }
@@ -112,6 +113,8 @@ public class DataProcessing {
         ArrayList<Doctor> doctorList = new ArrayList<Doctor>();
 
         for (int i = 0; i < dataList.size(); i++) {
+            // substring to remove the first and last characters which are brackets [ ]
+            // then split it using a comma delimiter to allow iteration over the individual elements of data
             String[] temp = dataList.get(i).substring(1, dataList.get(i).length() - 1).split(",");
             String id = temp[0].trim();
             String name = temp[1].trim();
@@ -130,11 +133,10 @@ public class DataProcessing {
         return doctorList;
     }
 
-
-    // this method is like what, INNER JOIN of two tables in SQL context?
-    // basically the doctors don't have their availability variable initialized at runtime because they have to wait
+    // This method is like what, INNER JOIN of two tables in an SQL context?
+    // Basically the doctors don't have their availability variable initialized at runtime because they have to wait
     // for the appointments list to generate first, only after that can they be updated with their appointments timeslots
-    // ,which is what this method is doing
+    // - which is what this method is doing
 
     // Might be more efficient with arraylist of arraylists???
 
@@ -144,10 +146,14 @@ public class DataProcessing {
             ArrayList<Appointment> appointmentsListSubset = new ArrayList<Appointment>();
 
             for (int j = 0; j < appointmentsList.size(); j++) {
+                // If the name of a doctor in the doctorsList matches the name of their corresponding name in appointment slots,
+                // then those set of appointment slots belongs to that doctor
                 if (doctorsList.get(i).getName().equals(appointmentsList.get(j).getDoctor().getName())) {
+                    // Add all these slots into a subset of the main Appointment list (the subset is itself another Appointment list)
                     appointmentsListSubset.add(appointmentsList.get(j));
                 }
             }
+            // Update the doctor's availability attribute with this list
             doctorsList.get(i).setAvailability(appointmentsListSubset);
         }
     }

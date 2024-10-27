@@ -1,8 +1,6 @@
 package Controllers;
 
-import Models.Appointment;
-import Models.Doctor;
-import Models.Patient;
+import Models.*;
 import Utility.*;
 
 import java.util.ArrayList;
@@ -29,8 +27,7 @@ public class PatientController extends UserController {
     boolean isValidSelectionType = true;
 
     // @Override
-    // I would rather not have to take in parameters for this method if possible, especially doctorList
-    public void displayMenu(Patient patient, ArrayList<Appointment> appointmentList) {
+    public void displayMenu(Patient patient, ArrayList<Doctor> doctorsList, ArrayList<Appointment> appointmentList) {
         int selector = 0;
         final int MAX_MENU_RANGE = 4;
 
@@ -54,7 +51,7 @@ public class PatientController extends UserController {
                     updatePersonalInfo(patient);
                     break;
                 case 3:
-                    appointmentPatientController.viewAvailAppts(patient, appointmentList); // do we even need an appointment class?
+                    appointmentPatientController.viewAvailAppts(patient, doctorsList, appointmentList);
                     break;
                 case 4:
                     break; //this can be return too, doesn't matter, although it will make the while (selector != MAX_MENU_RANGE) redundant
@@ -71,7 +68,8 @@ public class PatientController extends UserController {
         System.out.println("Phone Number: " + patient.getPhoneNo());
         System.out.println("Email: " + patient.getEmail());
         System.out.println("Blood Type: " + patient.getBloodType());
-        //System.out.println("Past Diagnoses and Treatments: " + patient.displayMedHistory());
+        // TO-DO - implement displayMedHistory()
+        // System.out.println("Past Diagnoses and Treatments: " + patient.displayMedHistory());
     }
 
     // Permitted editable fields: Phone number and email
@@ -111,15 +109,6 @@ public class PatientController extends UserController {
             }
         } while (selector != MAX_MENU_RANGE);
     }
-
-    // should these appointment methods be in an Appointment class instead?
-    // see, the problem with the implementation now is, now this method and every parent method that calls this method
-    // now requires a doctorList object as a parameter, in addition to instantiating a doctorController at the start of the class
-    // too much logic for just the patientController class??
-
-//    public void scheduleAppointment(Patient patient, ArrayList<Doctor> doctorList){
-//        doctorController.viewPersonalSchedulesOfAllDoctors(doctorList);
-//    }
 
     public void login() {
     }
