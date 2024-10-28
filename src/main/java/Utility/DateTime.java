@@ -58,7 +58,8 @@ public class DateTime {
         for (int i=0; i <doctorList.size(); i++){
             for (int j=0; j < formattedDatesList.size(); j++){
                 for (int k=1; k < timesList.size() + 1; k++){
-                    appointmentsList.add(new Appointment(k, null, doctorList.get(i), formattedDatesList.get(j),
+                    // Appointment ID is a combination of doctor's ID + current index k appended at the end of it
+                    appointmentsList.add(new Appointment(doctorList.get(i).getId() + k, null, doctorList.get(i), formattedDatesList.get(j),
                             timesList.get(k-1)));
                 }
             }

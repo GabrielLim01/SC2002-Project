@@ -71,6 +71,8 @@ public class Special {
                 case 4:
                     System.out.println("The Administrator feature has not yet been implemented.");
                     break;
+                case 5:
+                    break;
             }
 
         } while (selector != MAX_MENU_RANGE);
@@ -82,7 +84,7 @@ public class Special {
         boolean isLoginSuccessful = false;
         int currentLoginTries = 0;
         final int maxLoginTries = 5;
-        int difference = maxLoginTries - currentLoginTries;
+        int difference;
 
         System.out.println("Welcome to the Hospital Management System! Please input your user credentials:");
         do {

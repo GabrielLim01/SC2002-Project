@@ -20,17 +20,21 @@ public class DoctorController extends UserController {
     String input = "";
     boolean isValidSelectionType = true;
 
+    // Instantiated classes
+    AppointmentDoctorController appointmentDoctorController = new AppointmentDoctorController();
+
     // @Override
     public void displayMenu(Doctor doctor) {
         int selector = 0;
-        final int MAX_MENU_RANGE = 3;
+        final int MAX_MENU_RANGE = 4;
 
         do {
             do {
-                System.out.println("\nWelcome back! What would you like to do today?");
+                System.out.println("\nWelcome back, " + doctor.getName() + "! What would you like to do today?");
                 System.out.println("1. View Medical Record");
                 System.out.println("2. View Personal Schedule");
-                System.out.println("3. Exit");
+                System.out.println("3. Handle Appointment Requests");
+                System.out.println("4. Exit");
                 input = scanner.nextLine();
                 isValidSelectionType = validator.validateSelectorInput(input, 1, MAX_MENU_RANGE);
             } while (!isValidSelectionType);
@@ -44,6 +48,8 @@ public class DoctorController extends UserController {
                     viewPersonalSchedule(doctor);
                     break;
                 case 3:
+                    appointmentDoctorController.handleApptRequests(doctor);
+                case 4:
                     break;
             }
         } while (selector != MAX_MENU_RANGE);

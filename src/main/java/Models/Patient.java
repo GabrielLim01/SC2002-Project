@@ -19,6 +19,9 @@ public class Patient extends User {
     private String bloodType; // it cannot simply be char, because of Rh protein (e.g. O+ / O- blood type)
     private String role;
     private ArrayList<Appointment> appointments;
+    private int currentAppointmentBookings;
+    private int maxAppointmentBookings; // this is the field
+    private final int MAX_APPOINTMENT_BOOKINGS = 1; // this is the actual value
 
     // default constructor
     public Patient() {
@@ -34,7 +37,9 @@ public class Patient extends User {
         this.email = email;
         this.bloodType = bloodType;
         this.role = Roles.PATIENT.toString();
-        this.appointments = null;
+        this.appointments = new ArrayList<Appointment>();
+        this.currentAppointmentBookings = 0;
+        this.maxAppointmentBookings = MAX_APPOINTMENT_BOOKINGS;
     }
 
     public String getId() {
@@ -69,6 +74,18 @@ public class Patient extends User {
         return role;
     }
 
+    public ArrayList<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public int getCurrentAppointmentBookings(){
+        return currentAppointmentBookings;
+    }
+
+    public int getMaxAppointmentBookings(){
+        return maxAppointmentBookings;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -101,12 +118,12 @@ public class Patient extends User {
         this.role = role;
     }
 
-    public ArrayList<Appointment> getAppointments() {
-        return appointments;
-    }
-
     public void setAppointments(ArrayList<Appointment> appointments) {
         this.appointments = appointments;
+    }
+
+    public void setCurrentAppointmentBookings(int currentAppointmentBookings){
+        this.currentAppointmentBookings = currentAppointmentBookings;
     }
 };
 

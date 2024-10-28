@@ -1,11 +1,9 @@
 package Models;
 
-import java.time.*;
-
 public class Appointment {
 
     // attributes
-    private int id;
+    private String id;
     private Patient patient;
     private Doctor doctor;
 //    private LocalDate date;
@@ -18,12 +16,12 @@ public class Appointment {
     private String time;
     private String status;
 
-    private enum Status {
-        INACTIVE,
-        PENDING,
+    public enum Status {
+        AVAILABLE,  // default state of appointment, AVAILABLE for booking
+        PENDING,    // state when an appointment is booked by a Patient but has yet to be approved/rejected by a Doctor
         CONFIRMED,
         CANCELLED, // should this be REJECTED instead??
-        COMPLETED
+        COMPLETED   // state when the appointment is finished, used for medical records history
     }
 
     // default constructor
@@ -31,16 +29,16 @@ public class Appointment {
     }
 
     // standard constructor
-    public Appointment(int id, Patient patient, Doctor doctor, String date, String time) {
+    public Appointment(String id, Patient patient, Doctor doctor, String date, String time) {
         this.id = id;
         this.patient = patient;
         this.doctor = doctor;
         this.date = date;
         this.time = time;
-        this.status = Status.INACTIVE.toString();
+        this.status = Status.AVAILABLE.toString();
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -72,7 +70,7 @@ public class Appointment {
         return status;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

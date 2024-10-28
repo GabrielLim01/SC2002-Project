@@ -33,7 +33,7 @@ public class PatientController extends UserController {
 
         do {
             do {
-                System.out.println("\nWelcome back! What would you like to do today?");
+                System.out.println("\nWelcome back, " + patient.getName() + "! What would you like to do today?");
                 System.out.println("1. View Medical Record");
                 System.out.println("2. Update Personal Info");
                 System.out.println("3. Schedule An Appointment");
