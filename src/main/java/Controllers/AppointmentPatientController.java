@@ -1,6 +1,7 @@
 package Controllers;
 
 import Models.*;
+import Utility.DataProcessing;
 import Utility.Validator;
 
 import java.util.ArrayList;
@@ -15,9 +16,22 @@ public class AppointmentPatientController {
     DoctorController doctorController = new DoctorController();
     Scanner scanner = new Scanner(System.in);
     Validator validator = new Validator();
+    DataProcessing dp = new DataProcessing();
 
     // View which doctors' appointment slots are available
-    public void viewAvailAppts(Patient patient, ArrayList<Doctor> doctorsList, ArrayList<Appointment> appointmentList) {
+    public void viewAvailAppts(Patient patient, ArrayList<Doctor> doctorsList) {
+
+        ArrayList<Appointment> appointmentList = dp.updateAppointmentsList(doctorsList);
+        // DEBUGGING
+        int count=0;
+        for (int i = 0; i < appointmentList.size(); i++) {
+            if (appointmentList.get(i).getStatus().equals(Appointment.Status.AVAILABLE.toString())) {
+                count++;
+            }
+        }
+
+        // DEBUGGING
+        System.out.println("\nAVAILABLE APPOINTMENTS: " + count);
 
         // Should the following variables be local scope or global scope?
         String input = "";
@@ -109,8 +123,8 @@ public class AppointmentPatientController {
                             if (appointmentList.get(i).getStatus().equals(Appointment.Status.AVAILABLE.toString())) {
                                 System.out.println((i + 1) + ". " + appointmentList.get(i).getDate() + " " + appointmentList.get(i).getTime());
                             }
-                            // problem here - for loop incremental index is not going to be consistent with existing appointment slots' indexes
-                            // once some slots start getting booked, since we are not removing/adding appt slots from the list when they
+                            // problem here - for loop incremental index is not going to be consistent with existing appointment slots' indexes...
+                            // ...once some slots start getting booked, since we are not removing/adding appt slots from the list when they
                             // are reserved, but merely setting them to some flag other than AVAILABLE in order to "hide" their existence
                         }
                         System.out.println((appointmentList.size() + 1) + ". Back");
@@ -121,8 +135,8 @@ public class AppointmentPatientController {
 
                     selector = (Integer.parseInt(input) - 1);
 
-                    // again, same logic as maxDoctorsRange, ignore the following code if user changes their mind
-                    // about booking an appointment
+                    // again, same logic as maxDoctorsRange, ignore the following code if user changes their mind...
+                    // ...about booking an appointment
                     // is it possible to abstract this entire chunk of nested do-do-while segment of code for reusability?
                     // (yes it is possible but I don't want to bother with it now)
                     if (selector != (maxAppointmentsRange - 1)) {
@@ -132,13 +146,27 @@ public class AppointmentPatientController {
 
                             // set status of chosen appointment to PENDING
                             appointmentList.get(selector).setStatus(Appointment.Status.PENDING.toString());
+                            appointmentList.get(selector).setPatient(patient);
 
                             // the following lines of code require more validation but I'm too lazy to write the validation for them
                             // supposed to check that all these variables and methods exist / not null and nothing is missing
                             // I am assuming they all exist here, so basically zero validation done
                             ArrayList<Appointment> temp = patient.getAppointments();
-                            temp.add(appointmentList.get(selector));
+                            System.out.println("DEBUGGING - PATIENT's CURRENT APPOINTMENTS BEFORE UPDATE");
+                            temp.forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
+
+                            // when I "add" this object into the temp list, am I really creating a new object or simply adding the reference to it?
+                            // this distinction is very important for later code logic, because if I am adding the reference, I will have only 1 object but 2 references to it, and I want 2 of the same object instead
+                            // temp.add(appointmentList.get(selector));
+
+                            // I believe this is the correct way to do what I want...? I need to create a new object instead of passing a reference
+                            temp.add(new Appointment(appointmentList.get(selector).getId(), patient,
+                                    appointmentList.get(selector).getDoctor(), appointmentList.get(selector).getDate(),
+                                    appointmentList.get(selector).getTime(), Appointment.Status.PENDING.toString()));
+
                             patient.setAppointments(temp);
+                            System.out.println("DEBUGGING - PATIENT's CURRENT APPOINTMENTS AFTER UPDATE");
+                            patient.getAppointments().forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
 
                             // increment the number of bookings the patient has by 1
                             patient.setCurrentAppointmentBookings(patient.getCurrentAppointmentBookings() + 1);
@@ -149,7 +177,6 @@ public class AppointmentPatientController {
                         }
                         return;
                     }
-
                 } while (selector != (maxAppointmentsRange - 1));
             }
         } while (selector != (maxDoctorsRange - 1));

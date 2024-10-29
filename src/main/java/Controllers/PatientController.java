@@ -27,7 +27,7 @@ public class PatientController extends UserController {
     boolean isValidSelectionType = true;
 
     // @Override
-    public void displayMenu(Patient patient, ArrayList<Doctor> doctorsList, ArrayList<Appointment> appointmentList) {
+    public void displayMenu(Patient patient, ArrayList<Doctor> doctorsList) {
         int selector = 0;
         final int MAX_MENU_RANGE = 4;
 
@@ -51,7 +51,7 @@ public class PatientController extends UserController {
                     updatePersonalInfo(patient);
                     break;
                 case 3:
-                    appointmentPatientController.viewAvailAppts(patient, doctorsList, appointmentList);
+                    appointmentPatientController.viewAvailAppts(patient, doctorsList);
                     break;
                 case 4:
                     break; //this can be return too, doesn't matter, although it will make the while (selector != MAX_MENU_RANGE) redundant

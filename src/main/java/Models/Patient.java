@@ -21,7 +21,7 @@ public class Patient extends User {
     private ArrayList<Appointment> appointments;
     private int currentAppointmentBookings;
     private int maxAppointmentBookings; // this is the field
-    private final int MAX_APPOINTMENT_BOOKINGS = 1; // this is the actual value
+    private final int MAX_APPOINTMENT_BOOKINGS = 2; // this is the actual value
 
     // default constructor
     public Patient() {

@@ -38,6 +38,16 @@ public class Appointment {
         this.status = Status.AVAILABLE.toString();
     }
 
+    // overloaded constructor - additional parameter Status
+    public Appointment(String id, Patient patient, Doctor doctor, String date, String time, String status) {
+        this.id = id;
+        this.patient = patient;
+        this.doctor = doctor;
+        this.date = date;
+        this.time = time;
+        this.status = status;
+    }
+
     public String getId() {
         return id;
     }

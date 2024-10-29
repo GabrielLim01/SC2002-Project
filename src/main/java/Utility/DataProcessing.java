@@ -10,6 +10,7 @@ import Models.*;
 import com.opencsv.*;
 
 import java.io.*;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.time.format.DateTimeFormatter;
@@ -156,5 +157,18 @@ public class DataProcessing {
             // Update the doctor's availability attribute with this list
             doctorsList.get(i).setAvailability(appointmentsListSubset);
         }
+    }
+
+    public ArrayList<Appointment> updateAppointmentsList(ArrayList<Doctor> doctorsList){
+        ArrayList<Appointment> updatedOverallAppointmentsList = new ArrayList<Appointment>();
+
+        for (int i = 0; i < doctorsList.size(); i++) {
+//            for (int j = 0; j < doctorsList.get(i).getAvailability().size(); j++) {
+//                updatedOverallAppointmentsList.add(doctorsList.get(i).getAvailability().get(j));
+//            }
+            updatedOverallAppointmentsList.addAll(doctorsList.get(i).getAvailability());
+        }
+
+        return updatedOverallAppointmentsList;
     }
 }

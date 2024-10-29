@@ -49,6 +49,7 @@ public class DoctorController extends UserController {
                     break;
                 case 3:
                     appointmentDoctorController.handleApptRequests(doctor);
+                    break;
                 case 4:
                     break;
             }

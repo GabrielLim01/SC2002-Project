@@ -60,7 +60,9 @@ public class Special {
             selector = Integer.parseInt(input);
             switch (selector) {
                 case 1:
-                    patientController.displayMenu(patientList.get(0), doctorList, appointmentList);
+                    // big problem here - appointmentList cannot be a static parameter, has to be generated at runtime since appointment availability constantly updates
+                    // will need to modify my generation method later
+                    patientController.displayMenu(patientList.get(0), doctorList);
                     break;
                 case 2:
                     doctorController.displayMenu(doctorList.get(0));
