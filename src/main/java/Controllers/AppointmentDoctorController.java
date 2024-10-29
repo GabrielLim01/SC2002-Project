@@ -37,6 +37,10 @@ public class AppointmentDoctorController {
         // If I have some time later, I can consider changing the implementation of this to be a list of pending slots to choose from,
         // and the doctor can simply input their selected index of the timeslot to choose it and immediately approve/reject it rather than go through all of them one-by-one
         // (actually I can do that now but eh, lazy)
+
+        // (Oct 30, 2024 update) - I have actually implemented some functionality similar to the pick-and-choose to approve/reject style described above in the rescheduleAppt() method in AppointmentPatientController because I was forced to
+        // I will need to remember to migrate the code from there over to here later
+
         for (int i = 0; i < appointmentList.size(); i++) {
             if (appointmentList.get(i).getStatus().equals(Appointment.Status.PENDING.toString())) {
                 System.out.println("\nAppointment ID: " + appointmentList.get(i).getId());
@@ -70,8 +74,7 @@ public class AppointmentDoctorController {
                             for (int j = 0; j < patientAppointments.size(); j++) {
 
                                 // the Appointment ID is used here as the foreign key to match the doctor's side and the patient's side of the "same" appointment slot
-                                // remember, there are actually two separate instances of the "same" appointment slot, saved to different lists - one for the patient's side and one for the doctor's side
-                                // ideally, I would have a pointer for both sides pointing to the same appointment slot object (so just need to keep track of 1 object overall), but idk how to achieve that properly in here for now
+                                // remember, there are actually two separate instances (objects) of the "same" appointment slot, saved to different lists - one for the patient's side and one for the doctor's side
                                 if (appointmentList.get(i).getId().equals(patientAppointments.get(j).getId()) &&
                                         // additional check for CANCELLED status (because the user is able to re-book the same appointment slot)
                                         // iteration will skip over same ID but already marked as cancelled

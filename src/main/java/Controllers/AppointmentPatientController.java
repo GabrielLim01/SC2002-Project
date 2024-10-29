@@ -88,8 +88,6 @@ public class AppointmentPatientController {
     // take in doctorsList as parameters
     // would really like to avoid this way of passing data if possible but I'm not aware of any other way to do it for now
     public void bookApptByDoctor(Patient patient, ArrayList<Doctor> doctorsList) {
-        // Pick a doctor first
-
         String input = "";
         int selector = 0;
         int maxDoctorsRange = (doctorsList.size() + 1); // needs to be +1 for the output
@@ -113,6 +111,7 @@ public class AppointmentPatientController {
             // ignore the following code if the user selects the option to Exit or go Back
             // also needs to remove the additional 1 to prevent throwing of exceptions
             if (selector != (maxDoctorsRange - 1)) {
+                // Pick a doctor first
                 Doctor doctor = doctorsList.get(selector);
                 ArrayList<Appointment> appointmentList = doctor.getAvailability();
                 System.out.println("\nDoctor " + doctor.getName() + " is available at the following timeslots:");
@@ -192,81 +191,131 @@ public class AppointmentPatientController {
         String input = "";
         int selector = 0;
         boolean isValidSelectionType = true;
+        boolean updateReschedulableAppointments; // every time a rescheduling is successful. this boolean value will be set to true and trigger an updating of the reschedulableAppointments list
 
         ArrayList<Appointment> patientAppointments = patient.getAppointments();
         ArrayList<Appointment> reschedulableAppointments = new ArrayList<Appointment>();
 
-        for (int i = 0; i < patientAppointments.size(); i++) {
-            if (patientAppointments.get(i).getStatus().equals(Appointment.Status.PENDING.toString()) ||
-                    patientAppointments.get(i).getStatus().equals(Appointment.Status.CONFIRMED.toString())
-            ) {
-                // I am adding an object reference here, not a new object, so any operations done on reschedulableAppointments
-                // will automatically update the patientAppointments's "corresponding" appointment later too (rather, they are the same object)
-                reschedulableAppointments.add(patientAppointments.get(i));
-            }
-        }
+        do {
+            updateReschedulableAppointments = false;
 
-        if (!reschedulableAppointments.isEmpty()){
+            for (int i = 0; i < patientAppointments.size(); i++) {
+                if (patientAppointments.get(i).getStatus().equals(Appointment.Status.PENDING.toString()) ||
+                        patientAppointments.get(i).getStatus().equals(Appointment.Status.CONFIRMED.toString())
+                ) {
+                    // For the adding of items to the reschedulableAppointments list,
+                    // I am adding an object reference, not a new object, so any operations done on reschedulableAppointments
+                    // will automatically update the patientAppointments's "corresponding" appointment later too (rather, they are just pointers to the same object)
 
-            int maxAppointmentsRange = (reschedulableAppointments.size() + 1);
+                    // Adding of items use cases:
+                    // Case 1: Check whether list is new/empty, allow unrestricted adding of new elements if so
+                    if (reschedulableAppointments.isEmpty()) {
+                        reschedulableAppointments.add(patientAppointments.get(i));
+                        // System.out.println("DEBUGGING - Adding " + patientAppointments.get(i).getDate() + " " + patientAppointments.get(i).getTime());
+                    } else {
+                        // Case 2: Check for duplicate entries and do not add duplicate entries into the list
+                        for (int j = 0; j < reschedulableAppointments.size(); j++) {
+                            if (!reschedulableAppointments.get(j).getId().equals(patientAppointments.get(i).getId())) {
+                                reschedulableAppointments.add(patientAppointments.get(i));
+                               // System.out.println("DEBUGGING - Adding " + patientAppointments.get(i).getDate() + " " + patientAppointments.get(i).getTime());
 
-            do {
-                System.out.println("\nWhich appointment would you like to reschedule?");
-                for (int i = 0; i < reschedulableAppointments.size(); i++) {
-                    System.out.println((i + 1) + ". " + reschedulableAppointments.get(i).getDate() + " " + reschedulableAppointments.get(i).getTime());
-                }
-                System.out.println((reschedulableAppointments.size() + 1) + ". Back");
-
-                do {
-                    input = scanner.nextLine();
-                    isValidSelectionType = validator.validateSelectorInput(input, 1, maxAppointmentsRange);
-                } while (!isValidSelectionType);
-
-                selector = (Integer.parseInt(input) - 1);
-
-                if (selector != (maxAppointmentsRange - 1)) {
-                    System.out.println("\nPlease select a new timeslot for your appointment!");
-
-                    // I need to overload this method to return a boolean to tell me if the booking is successful or not
-                    // There is only one case where it will end in an error and that is if the user tries to input an "invisible" index, like inputting 1. when 1. is not a "visible" option
-                    // Ideally, I should handle that error case within the scheduleAppt() method itself, but I foresee it being a pain so I am not doing that for now
-                    // For the time being, I will just assume that the booking done via this method is always successful (i.e. no validation done for now, which is dangerous)
-                    scheduleAppt(patient, doctorList);
-
-                    // boolean isSuccessful = scheduleAppt(patient, doctorList);
-                    // TRUE if no error
-                    // FALSE if error, or user changed their mind about rescheduling
-                    // Error cases:
-                    // 1. User inputs an "invisible" index (which is an error case I did not bother to fix in the original method)
-                    // 2. User inputs the option to go "Back", which means the rest of the code should not execute
-
-                    // scheduleAppt automatically increments the user's booking try at the end of the method
-                    // Because this is a reschedule operation, refund the user's booking try
-                    patient.decrementCurrentAppointmentBookings();
-
-                    // Set the status of the appointment being rescheduled to AVAILABLE in both the patient and doctor's appointment lists
-                    ArrayList<Appointment> doctorAppointments = reschedulableAppointments.get(selector).getDoctor().getAvailability();
-                    for (int i = 0; i < doctorAppointments.size(); i++) {
-                        if (doctorAppointments.get(i).getId().equals(reschedulableAppointments.get(selector).getId())) {
-                            reschedulableAppointments.get(selector).setStatus(Appointment.Status.AVAILABLE.toString());
-                            doctorAppointments.get(i).setStatus(Appointment.Status.AVAILABLE.toString());
+                            }
                         }
                     }
-
-                    // DEBUGGING
-                    System.out.println("\nDEBUGGING - Doctor's appointments and statuses");
-                    doctorAppointments.forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
-                    System.out.println("\nDEBUGGING - Patient's appointments and statuses");
-                    patientAppointments.forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
-
-                    // Now here comes the tricky part
-                    // I need to somehow update rescheduleAppts from within this do/while loop
-                    // Or I can also 'return' and totally exit this method, but what if the user has more than one appointment to reschedule...?
                 }
-            } while (selector != (maxAppointmentsRange - 1));
-        } else {
-            System.out.println("There are no appointments available for you to reschedule.");
-        }
+            }
+
+            if (!reschedulableAppointments.isEmpty()) {
+
+                int maxAppointmentsRange = (reschedulableAppointments.size() + 1);
+
+                do {
+                    System.out.println("\nWhich appointment would you like to reschedule?");
+                    for (int i = 0; i < reschedulableAppointments.size(); i++) {
+                        System.out.println((i + 1) + ". " + reschedulableAppointments.get(i).getDate() + " " + reschedulableAppointments.get(i).getTime());
+                    }
+                    System.out.println((reschedulableAppointments.size() + 1) + ". Back");
+
+                    do {
+                        input = scanner.nextLine();
+                        isValidSelectionType = validator.validateSelectorInput(input, 1, maxAppointmentsRange);
+                    } while (!isValidSelectionType);
+
+                    selector = (Integer.parseInt(input) - 1);
+
+                    if (selector != (maxAppointmentsRange - 1)) {
+                        System.out.println("\nPlease select a new timeslot for your appointment!");
+
+                        // I need to clone and modify this method - scheduleAppt() - to return a boolean to tell me if the booking is successful or not
+                        // There is only one case where it will end in an error and that is if the user tries to input an "invisible" index, like inputting 1. when 1. is not a "visible" option
+                        // Ideally, I should handle that error case within the scheduleAppt() method itself, but I foresee it being a pain so I am not doing that for now
+                        // For the time being, I will just assume that the booking done via this method is always successful (i.e. no validation done for now, which is dangerous)
+
+                        // boolean isSuccessful = scheduleAppt(patient, doctorList);
+                        // TRUE if no error
+                        // FALSE if error, or user changed their mind about rescheduling
+                        // Error cases:
+                        // 1. User inputs an "invisible" index (which is an error case I did not bother to fix in the original method)
+                        // 2. User inputs the option to go "Back", which means the rest of the code should not execute
+
+                        // UPDATE - cloned/modified the method to return a boolean
+                        boolean isSuccessful = scheduleApptWithBoolean(patient, doctorList);
+
+                        // scheduleAppt automatically increments the user's booking try at the end of the method
+                        // Because this is a reschedule operation, refund the user's booking try
+                        if (isSuccessful) {
+                            patient.decrementCurrentAppointmentBookings();
+
+                            // Set the status of the appointment being rescheduled to AVAILABLE in the doctor's appointment list,
+                            // and remove it from the patient's list
+                            ArrayList<Appointment> doctorAppointments = reschedulableAppointments.get(selector).getDoctor().getAvailability();
+                            for (int i = 0; i < doctorAppointments.size(); i++) {
+                                if (doctorAppointments.get(i).getId().equals(reschedulableAppointments.get(selector).getId())) {
+                                    doctorAppointments.get(i).setStatus(Appointment.Status.AVAILABLE.toString());
+                                    patientAppointments.remove(reschedulableAppointments.get(selector));
+                                }
+                            }
+
+                            // DEBUGGING
+                            System.out.println("\nDEBUGGING - Doctor's appointments and statuses");
+                            doctorAppointments.forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
+                            System.out.println("\nDEBUGGING - Patient's appointments and statuses");
+                            patientAppointments.forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
+
+                            // Also remove the rescheduled appointment from the locally-scoped reschedulableAppointments list
+                            reschedulableAppointments.remove(reschedulableAppointments.get(selector));
+
+                            // Now here comes the tricky part
+                            // I need to somehow update rescheduleAppts from within this do/while loop
+                            // Or I can also 'return' and totally exit this method, but what if the user has more than one appointment to reschedule...?
+                            // Let's try this
+                            updateReschedulableAppointments = true;
+//                            System.out.println("\nDEBUGGING - After successful rescheduling");
+//                            System.out.println("DEBUGGING - updateReschedulableAppointments status: " + updateReschedulableAppointments);
+
+                        } else {
+                            System.out.println("Rescheduling was not successful. Please try again.");
+
+                            // There should actually be two custom messages to handle the two different scenarios of rescheduling failure as mentioned above
+                            // 1. - Rescheduling failed due to error ^that default message above
+                            // 2. - Rescheduling "failed" due to user backing out - "Changed your mind, eh?"
+
+                            // If I want to handle this additional custom message complexity, I need to return an int instead of a boolean, and the int will have 3 values
+                            // 0 - successful
+                            // 1 - unsuccessful due to error
+                            // 2 - unsuccessful due to user inputting Back option
+                            // (...would a String enum be better for this??)
+                        }
+                    }
+//                    System.out.println("DEBUGGING - Right before breaking out of first/inner do-while loop");
+//                    System.out.println("DEBUGGING - updateReschedulableAppointments status: " + updateReschedulableAppointments);
+                } while (selector != (maxAppointmentsRange - 1) && !updateReschedulableAppointments);
+            } else {
+                System.out.println("There are no appointments available for you to reschedule.");
+            }
+//            System.out.println("DEBUGGING - Right before breaking out of second/outer do-while loop");
+//            System.out.println("DEBUGGING - updateReschedulableAppointments status: " + updateReschedulableAppointments);
+        } while (updateReschedulableAppointments);
     }
 
     // Cancel appointment, and update slot availability automatically
@@ -282,5 +331,94 @@ public class AppointmentPatientController {
     // View past appointment outcome records
     public void viewApptOutcomeRec() {
 
+    }
+
+// ADDITIONAL METHODS NOT REQUIRED BY TEST CASES
+// THESE METHODS ARE PRETTY MUCH COPIES OF EXISTING METHODS, WITH MINOR DIFFERENCES (e.g. returning a boolean value)
+
+    public boolean scheduleApptWithBoolean(Patient patient, ArrayList<Doctor> doctorsList) {
+        return bookApptByDoctorWithBoolean(patient, doctorsList);
+    }
+
+    public boolean bookApptByDoctorWithBoolean(Patient patient, ArrayList<Doctor> doctorsList) {
+        // NEW CODE
+        boolean isSuccessful = true;
+
+        String input = "";
+        int selector = 0;
+        int maxDoctorsRange = (doctorsList.size() + 1); // needs to be +1 for the output
+        int maxAppointmentsRange;
+        boolean isValidSelectionType = true;
+
+        do {
+            do {
+                // Printed variables needs to be +1 for the output to display starting from 1 and not 0
+                System.out.println("\nPlease select a doctor for the appointment:");
+                for (int i = 0; i < doctorsList.size(); i++) {
+                    System.out.println((i + 1) + ". " + doctorsList.get(i).getName());
+                }
+                System.out.println((doctorsList.size() + 1) + ". Exit");
+                input = scanner.nextLine();
+                isValidSelectionType = validator.validateSelectorInput(input, 1, maxDoctorsRange);
+            } while (!isValidSelectionType);
+
+            selector = (Integer.parseInt(input) - 1);
+
+            if (selector != (maxDoctorsRange - 1)) {
+                Doctor doctor = doctorsList.get(selector);
+                ArrayList<Appointment> appointmentList = doctor.getAvailability();
+                System.out.println("\nDoctor " + doctor.getName() + " is available at the following timeslots:");
+                maxAppointmentsRange = (appointmentList.size() + 1);
+
+                do {
+                    do {
+                        System.out.println();
+                        for (int i = 0; i < appointmentList.size(); i++) {
+                            if (appointmentList.get(i).getStatus().equals(Appointment.Status.AVAILABLE.toString())) {
+                                System.out.println((i + 1) + ". " + appointmentList.get(i).getDate() + " " + appointmentList.get(i).getTime());
+                            }
+                        }
+                        System.out.println((appointmentList.size() + 1) + ". Back");
+                        System.out.println("\nPlease select your preferred timeslot for the appointment:");
+                        input = scanner.nextLine();
+                        isValidSelectionType = validator.validateSelectorInput(input, 1, maxAppointmentsRange);
+                    } while (!isValidSelectionType);
+
+                    selector = (Integer.parseInt(input) - 1);
+
+                    if (selector != (maxAppointmentsRange - 1)) {
+                        if (appointmentList.get(selector).getStatus().equals(Appointment.Status.AVAILABLE.toString())) {
+
+                            appointmentList.get(selector).setStatus(Appointment.Status.PENDING.toString());
+                            appointmentList.get(selector).setPatient(patient);
+
+                            ArrayList<Appointment> temp = patient.getAppointments();
+                            System.out.println("DEBUGGING - PATIENT's CURRENT APPOINTMENTS BEFORE UPDATE");
+                            temp.forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
+
+                            temp.add(new Appointment(appointmentList.get(selector).getId(), patient,
+                                    appointmentList.get(selector).getDoctor(), appointmentList.get(selector).getDate(),
+                                    appointmentList.get(selector).getTime(), Appointment.Status.PENDING.toString()));
+
+                            patient.setAppointments(temp);
+                            System.out.println("DEBUGGING - PATIENT's CURRENT APPOINTMENTS AFTER UPDATE");
+                            patient.getAppointments().forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
+
+                            patient.incrementCurrentAppointmentBookings();
+
+                            System.out.println("Appointment successfully booked! Please wait for the doctor to review your request.");
+                        } else {
+                            System.out.println("Something went wrong. Appointment not successfully booked.");
+                            return !isSuccessful;   // NEW CODE
+                        }
+                        return isSuccessful;   // NEW CODE
+                    }
+                } while (selector != (maxAppointmentsRange - 1));
+            }
+        } while (selector != (maxDoctorsRange - 1));
+
+        // NEW CODE
+        // // if this code executes, it means the user inputted the option to go Back
+        return !isSuccessful;
     }
 }

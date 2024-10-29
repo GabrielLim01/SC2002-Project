@@ -62,6 +62,7 @@ public class Special {
                 case 1:
                     // big problem here - appointmentList cannot be a static parameter, has to be generated at runtime since appointment availability constantly updates
                     // will need to modify my generation method later
+                    // (Oct 30, 2024 update) Actually there is no problem since I am updating the appointments lists directly
                     patientController.displayMenu(patientList.get(0), doctorList, appointmentList);
                     break;
                 case 2:
