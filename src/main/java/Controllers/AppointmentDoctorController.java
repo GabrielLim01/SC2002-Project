@@ -65,6 +65,7 @@ public class AppointmentDoctorController {
 
                             // in order to find the patient's side of the corresponding appointment, we need to iterate over all their appointments (which is limited by the MAX_APPOINTMENT_BOOKINGS attribute in the Patient class)
                             // it's hardcoded to be 1 for now (as of Oct 29, 2024), but can be bigger like 2 or 3 in the future
+                            // (Oct 29, 2024 further update) hardcoded value for bookings changed to 2
                             ArrayList<Appointment> patientAppointments = appointmentList.get(i).getPatient().getAppointments();
                             for (int j = 0; j < patientAppointments.size(); j++) {
 
@@ -119,7 +120,7 @@ public class AppointmentDoctorController {
                             appointmentList.get(i).getPatient().getAppointments().forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
 
                             // Decrement the patient's current appointment bookings by 1 to allow the patient to book once more
-                            appointmentList.get(i).getPatient().setCurrentAppointmentBookings(appointmentList.get(i).getPatient().getCurrentAppointmentBookings() - 1);
+                            appointmentList.get(i).getPatient().decrementCurrentAppointmentBookings();
 
                             System.out.println("Appointment has been rejected!");
                             break;

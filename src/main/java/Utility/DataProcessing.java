@@ -159,16 +159,19 @@ public class DataProcessing {
         }
     }
 
-    public ArrayList<Appointment> updateAppointmentsList(ArrayList<Doctor> doctorsList){
-        ArrayList<Appointment> updatedOverallAppointmentsList = new ArrayList<Appointment>();
-
-        for (int i = 0; i < doctorsList.size(); i++) {
-//            for (int j = 0; j < doctorsList.get(i).getAvailability().size(); j++) {
-//                updatedOverallAppointmentsList.add(doctorsList.get(i).getAvailability().get(j));
-//            }
-            updatedOverallAppointmentsList.addAll(doctorsList.get(i).getAvailability());
-        }
-
-        return updatedOverallAppointmentsList;
-    }
+    // Actually I don't need this method right now
+    // This method lets me get away with not having to pass ArrayList<Appointment> appointmentList as an argument in parent methods
+    // Might need it later
+//    public ArrayList<Appointment> updateAppointmentsList(ArrayList<Doctor> doctorsList){
+//        ArrayList<Appointment> updatedOverallAppointmentsList = new ArrayList<Appointment>();
+//
+//        for (int i = 0; i < doctorsList.size(); i++) {
+////            for (int j = 0; j < doctorsList.get(i).getAvailability().size(); j++) {
+////                updatedOverallAppointmentsList.add(doctorsList.get(i).getAvailability().get(j));
+////            }
+//            updatedOverallAppointmentsList.addAll(doctorsList.get(i).getAvailability());
+//        }
+//
+//        return updatedOverallAppointmentsList;
+//    }
 }
