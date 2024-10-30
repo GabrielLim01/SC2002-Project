@@ -29,7 +29,7 @@ public class PatientController extends UserController {
     // @Override
     public void displayMenu(Patient patient, ArrayList<Doctor> doctorsList, ArrayList<Appointment> appointmentList) {
         int selector = 0;
-        final int MAX_MENU_RANGE = 6;
+        final int MAX_MENU_RANGE = 8;
 
         do {
             do {
@@ -39,7 +39,9 @@ public class PatientController extends UserController {
                 System.out.println("3. Schedule An Appointment");
                 System.out.println("4. Reschedule An Appointment");
                 System.out.println("5. Cancel An Appointment");
-                System.out.println("6. Exit");
+                System.out.println("6. View Appointments");
+                System.out.println("7. View Past Appointment Outcome Records (INCOMPLETE)");
+                System.out.println("8. Exit");
                 input = scanner.nextLine();
                 isValidSelectionType = validator.validateSelectorInput(input, 1, MAX_MENU_RANGE);
             } while (!isValidSelectionType);
@@ -62,6 +64,12 @@ public class PatientController extends UserController {
                     appointmentPatientController.cancelAppt(patient, doctorsList);
                     break;
                 case 6:
+                    appointmentPatientController.viewAppts(patient);
+                    break;
+                case 7:
+                    appointmentPatientController.viewApptOutcomeRec(patient);
+                    break;
+                case 8:
                     break; //this can be return too, doesn't matter, although it will make the while (selector != MAX_MENU_RANGE) redundant
             }
         } while (selector != MAX_MENU_RANGE);

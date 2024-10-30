@@ -417,14 +417,21 @@ public class AppointmentPatientController {
         } while (updateCancellableAppointments);
     }
 
-    // See status of schedule appointments
-    public void viewApptStatus() {
-
+    // See status of scheduled appointments
+    public void viewAppts(Patient patient) {
+        if (!patient.getAppointments().isEmpty()){
+            System.out.println("Your appointments are as follows:");
+            patient.getAppointments().forEach(s -> System.out.println("\nDoctor: " + s.getDoctor().getName() + "\n" +
+                                                                      "Timeslot: " + s.getDate() + " " + s.getTime() + "\n" +
+                                                                      "Status: " + s.getStatus()));
+        } else {
+            System.out.println("You have no appointment history!");
+        }
     }
 
     // View past appointment outcome records
-    public void viewApptOutcomeRec() {
-
+    public void viewApptOutcomeRec(Patient patient) {
+        System.out.println("この機能はまだ完成したみたい、ごめんなさいね");
     }
 
 // ADDITIONAL METHODS NOT REQUIRED BY TEST CASES

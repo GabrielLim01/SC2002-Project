@@ -131,6 +131,9 @@ public class AppointmentDoctorController {
                                 break;
                             }
                             case 2: {
+                                // TO-DO
+                                // Add functionality for "Rejection Reason" later
+
                                 // set the appointment slot in the doctor's availability list back to AVAILABLE
                                 pendingList.get(index).setStatus(Appointment.Status.AVAILABLE.toString());
                                 System.out.println("DEBUGGING - DOCTOR APPT STATUS - " + pendingList.get(index).getStatus());
