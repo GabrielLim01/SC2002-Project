@@ -164,9 +164,6 @@ public class AppointmentDoctorController {
                                 break;
                             }
                         }
-//                        if (updatePendingList){
-//                            break;
-//                        }
                     } while (selector != MAX_MENU_RANGE && !updatePendingList);
                 }
             } else {

@@ -311,7 +311,7 @@ public class AppointmentPatientController {
 //                            System.out.println("DEBUGGING - updateReschedulableAppointments status: " + updateReschedulableAppointments);
 
                         } else {
-                            System.out.println("Rescheduling was not successful. Please try again.");
+                            System.out.println("Rescheduling was not completed.");
 
                             // There should actually be two custom messages to handle the two different scenarios of rescheduling failure as mentioned above
                             // 1. - Rescheduling failed due to error ^that default message above
@@ -336,8 +336,85 @@ public class AppointmentPatientController {
     }
 
     // Cancel appointment, and update slot availability automatically
-    public void cancelAppt() {
+    public void cancelAppt(Patient patient, ArrayList<Doctor> doctorList) {
+        String input = "";
+        int selector = 0;
+        boolean isValidSelectionType = true;
+        boolean updateCancellableAppointments; // every time a cancellation is successful. this boolean value will be set to true and trigger an updating of the cancellableAppointments list
 
+        ArrayList<Appointment> patientAppointments = patient.getAppointments();
+        ArrayList<Appointment> cancellableAppointments = new ArrayList<Appointment>();
+
+        do {
+            updateCancellableAppointments = false;
+
+            for (int i = 0; i < patientAppointments.size(); i++) {
+                if (patientAppointments.get(i).getStatus().equals(Appointment.Status.PENDING.toString()) ||
+                        patientAppointments.get(i).getStatus().equals(Appointment.Status.CONFIRMED.toString())
+                ) {
+                    // Adding of items use cases:
+                    // Case 1: Check whether list is new/empty, allow unrestricted adding of new elements if so
+                    if (cancellableAppointments.isEmpty()) {
+                        cancellableAppointments.add(patientAppointments.get(i));
+                        // System.out.println("DEBUGGING - Adding " + patientAppointments.get(i).getDate() + " " + patientAppointments.get(i).getTime());
+                    } else {
+                        // Case 2: Check for duplicate entries and do not add duplicate entries into the list
+                        for (int j = 0; j < cancellableAppointments.size(); j++) {
+                            if (!cancellableAppointments.get(j).getId().equals(patientAppointments.get(i).getId())) {
+                                cancellableAppointments.add(patientAppointments.get(i));
+                                // System.out.println("DEBUGGING - Adding " + patientAppointments.get(i).getDate() + " " + patientAppointments.get(i).getTime());
+
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!cancellableAppointments.isEmpty()) {
+
+                int maxAppointmentsRange = (cancellableAppointments.size() + 1);
+
+                do {
+                    System.out.println("\nWhich appointment would you like to cancel?");
+                    for (int i = 0; i < cancellableAppointments.size(); i++) {
+                        System.out.println((i + 1) + ". " + cancellableAppointments.get(i).getDate() + " " + cancellableAppointments.get(i).getTime());
+                    }
+                    System.out.println((cancellableAppointments.size() + 1) + ". Back");
+
+                    do {
+                        input = scanner.nextLine();
+                        isValidSelectionType = validator.validateSelectorInput(input, 1, maxAppointmentsRange);
+                    } while (!isValidSelectionType);
+
+                    selector = (Integer.parseInt(input) - 1);
+
+                    if (selector != (maxAppointmentsRange - 1)) {
+
+                        patient.decrementCurrentAppointmentBookings();
+
+                        ArrayList<Appointment> doctorAppointments = cancellableAppointments.get(selector).getDoctor().getAvailability();
+                        for (int i = 0; i < doctorAppointments.size(); i++) {
+                            if (doctorAppointments.get(i).getId().equals(cancellableAppointments.get(selector).getId())) {
+                                doctorAppointments.get(i).setStatus(Appointment.Status.AVAILABLE.toString());
+                                patientAppointments.remove(cancellableAppointments.get(selector));
+                            }
+                        }
+
+                        // DEBUGGING
+                        System.out.println("\nDEBUGGING - Doctor's appointments and statuses");
+                        doctorAppointments.forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
+                        System.out.println("\nDEBUGGING - Patient's appointments and statuses");
+                        patientAppointments.forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
+
+                        System.out.println("\nAppointment successfully cancelled!");
+                        cancellableAppointments.remove(cancellableAppointments.get(selector));
+                        updateCancellableAppointments = true;
+                    }
+                } while (selector != (maxAppointmentsRange - 1) && !updateCancellableAppointments);
+            } else {
+                System.out.println("There are no appointments available for you to cancel.");
+            }
+        } while (updateCancellableAppointments);
     }
 
     // See status of schedule appointments
