@@ -93,6 +93,7 @@ public class AppointmentPatientController {
         int maxDoctorsRange = (doctorsList.size() + 1); // needs to be +1 for the output
         int maxAppointmentsRange;
         boolean isValidSelectionType = true;
+        boolean isConflictingTimeslot = false;
 
         do {
             do {
@@ -143,41 +144,56 @@ public class AppointmentPatientController {
                     // (yes it is possible but I don't want to bother with it now)
                     if (selector != (maxAppointmentsRange - 1)) {
 
-                        // very weak form of validation, maybe should be a try/catch block with more specific validation cases idk
+                        // Check if the user tries to pick an "invisible" index
+                        // Very weak form of validation, maybe should be a try/catch block with more specific validation cases idk
+                        // (Or I should just rewrite my code for the "invisible index" option to not even be a possibility...)
                         if (appointmentList.get(selector).getStatus().equals(Appointment.Status.AVAILABLE.toString())) {
 
-                            // set status of chosen appointment to PENDING
-                            appointmentList.get(selector).setStatus(Appointment.Status.PENDING.toString());
-                            appointmentList.get(selector).setPatient(patient);
+                            // Check if the timeslot chosen conflicts with any of the patient's existing appointment slots
+                            for (int i = 0; i < patient.getAppointments().size(); i++) {
+                                if (appointmentList.get(selector).getDate().equals(patient.getAppointments().get(i).getDate()) &&
+                                        appointmentList.get(selector).getTime().equals(patient.getAppointments().get(i).getTime())) {
+                                    isConflictingTimeslot = true;
+                                }
+                            }
 
-                            // the following lines of code require more validation but I'm too lazy to write the validation for them
-                            // supposed to check that all these variables and methods exist / not null and nothing is missing
-                            // I am assuming they all exist here, so basically zero validation done
-                            ArrayList<Appointment> temp = patient.getAppointments();
-                            System.out.println("DEBUGGING - PATIENT's CURRENT APPOINTMENTS BEFORE UPDATE");
-                            temp.forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
+                            if (!isConflictingTimeslot) {
+                                // set status of chosen appointment to PENDING
+                                appointmentList.get(selector).setStatus(Appointment.Status.PENDING.toString());
+                                appointmentList.get(selector).setPatient(patient);
 
-                            // when I "add" this object into the temp list, am I really creating a new object or simply adding the reference to it?
-                            // this distinction is very important for later code logic, because if I am adding the reference, I will have only 1 object but 2 references to it, and I want 2 of the same object instead
-                            // temp.add(appointmentList.get(selector));
+                                // the following lines of code require more validation but I'm too lazy to write the validation for them
+                                // supposed to check that all these variables and methods exist / not null and nothing is missing
+                                // I am assuming they all exist here, so basically zero validation done
+                                ArrayList<Appointment> temp = patient.getAppointments();
+                                System.out.println("DEBUGGING - PATIENT's CURRENT APPOINTMENTS BEFORE UPDATE");
+                                temp.forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
 
-                            // I believe this is the correct way to do what I want...? I need to create a new object instead of passing a reference
-                            temp.add(new Appointment(appointmentList.get(selector).getId(), patient,
-                                    appointmentList.get(selector).getDoctor(), appointmentList.get(selector).getDate(),
-                                    appointmentList.get(selector).getTime(), Appointment.Status.PENDING.toString()));
+                                // when I "add" this object into the temp list, am I really creating a new object or simply adding the reference to it?
+                                // this distinction is very important for later code logic, because if I am adding the reference, I will have only 1 object but 2 references to it, and I want 2 of the same object instead
+                                // temp.add(appointmentList.get(selector));
 
-                            patient.setAppointments(temp);
-                            System.out.println("DEBUGGING - PATIENT's CURRENT APPOINTMENTS AFTER UPDATE");
-                            patient.getAppointments().forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
+                                // I believe this is the correct way to do what I want...? I need to create a new object instead of passing a reference
+                                temp.add(new Appointment(appointmentList.get(selector).getId(), patient,
+                                        appointmentList.get(selector).getDoctor(), appointmentList.get(selector).getDate(),
+                                        appointmentList.get(selector).getTime(), Appointment.Status.PENDING.toString()));
 
-                            // increment the number of bookings the patient has by 1
-                            patient.incrementCurrentAppointmentBookings();
+                                patient.setAppointments(temp);
+                                System.out.println("DEBUGGING - PATIENT's CURRENT APPOINTMENTS AFTER UPDATE");
+                                patient.getAppointments().forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
 
-                            System.out.println("Appointment successfully booked! Please wait for the doctor to review your request.");
+                                // increment the number of bookings the patient has by 1
+                                patient.incrementCurrentAppointmentBookings();
+
+                                System.out.println("Appointment successfully booked! Please wait for the doctor to review your request.");
+                                return;
+                            } else {
+                                System.out.println("The timeslot you have selected conflicts with one of your existing appointment slots.\nPlease select another timeslot.");
+                                isConflictingTimeslot = false;  // set it back to false after the logic is run
+                            }
                         } else {
-                            System.out.println("Something went wrong. Appointment not successfully booked.");
+                            System.out.println("That appointment slot is not available for booking. Please select another timeslot.");
                         }
-                        return;
                     }
                 } while (selector != (maxAppointmentsRange - 1));
             }
@@ -217,7 +233,7 @@ public class AppointmentPatientController {
                         for (int j = 0; j < reschedulableAppointments.size(); j++) {
                             if (!reschedulableAppointments.get(j).getId().equals(patientAppointments.get(i).getId())) {
                                 reschedulableAppointments.add(patientAppointments.get(i));
-                               // System.out.println("DEBUGGING - Adding " + patientAppointments.get(i).getDate() + " " + patientAppointments.get(i).getTime());
+                                // System.out.println("DEBUGGING - Adding " + patientAppointments.get(i).getDate() + " " + patientAppointments.get(i).getTime());
 
                             }
                         }
@@ -349,6 +365,7 @@ public class AppointmentPatientController {
         int maxDoctorsRange = (doctorsList.size() + 1); // needs to be +1 for the output
         int maxAppointmentsRange;
         boolean isValidSelectionType = true;
+        boolean isConflictingTimeslot = false;
 
         do {
             do {
@@ -389,29 +406,40 @@ public class AppointmentPatientController {
                     if (selector != (maxAppointmentsRange - 1)) {
                         if (appointmentList.get(selector).getStatus().equals(Appointment.Status.AVAILABLE.toString())) {
 
-                            appointmentList.get(selector).setStatus(Appointment.Status.PENDING.toString());
-                            appointmentList.get(selector).setPatient(patient);
+                            for (int i = 0; i < patient.getAppointments().size(); i++) {
+                                if (appointmentList.get(selector).getDate().equals(patient.getAppointments().get(i).getDate()) &&
+                                        appointmentList.get(selector).getTime().equals(patient.getAppointments().get(i).getTime())) {
+                                    isConflictingTimeslot = true;
+                                }
+                            }
 
-                            ArrayList<Appointment> temp = patient.getAppointments();
-                            System.out.println("DEBUGGING - PATIENT's CURRENT APPOINTMENTS BEFORE UPDATE");
-                            temp.forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
+                            if (!isConflictingTimeslot) {
+                                appointmentList.get(selector).setStatus(Appointment.Status.PENDING.toString());
+                                appointmentList.get(selector).setPatient(patient);
 
-                            temp.add(new Appointment(appointmentList.get(selector).getId(), patient,
-                                    appointmentList.get(selector).getDoctor(), appointmentList.get(selector).getDate(),
-                                    appointmentList.get(selector).getTime(), Appointment.Status.PENDING.toString()));
+                                ArrayList<Appointment> temp = patient.getAppointments();
+                                System.out.println("DEBUGGING - PATIENT's CURRENT APPOINTMENTS BEFORE UPDATE");
+                                temp.forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
 
-                            patient.setAppointments(temp);
-                            System.out.println("DEBUGGING - PATIENT's CURRENT APPOINTMENTS AFTER UPDATE");
-                            patient.getAppointments().forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
+                                temp.add(new Appointment(appointmentList.get(selector).getId(), patient,
+                                        appointmentList.get(selector).getDoctor(), appointmentList.get(selector).getDate(),
+                                        appointmentList.get(selector).getTime(), Appointment.Status.PENDING.toString()));
 
-                            patient.incrementCurrentAppointmentBookings();
+                                patient.setAppointments(temp);
+                                System.out.println("DEBUGGING - PATIENT's CURRENT APPOINTMENTS AFTER UPDATE");
+                                patient.getAppointments().forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
 
-                            System.out.println("Appointment successfully booked! Please wait for the doctor to review your request.");
+                                patient.incrementCurrentAppointmentBookings();
+
+                                System.out.println("Appointment successfully booked! Please wait for the doctor to review your request.");
+                                return isSuccessful;   // NEW CODE
+                            } else {
+                                System.out.println("The timeslot you have selected conflicts with one of your existing appointment slots.\nPlease select another timeslot.");
+                                isConflictingTimeslot = false;  // set it back to false after the logic is run
+                            }
                         } else {
-                            System.out.println("Something went wrong. Appointment not successfully booked.");
-                            return !isSuccessful;   // NEW CODE
+                            System.out.println("That appointment slot is not available for booking. Please select another timeslot.");
                         }
-                        return isSuccessful;   // NEW CODE
                     }
                 } while (selector != (maxAppointmentsRange - 1));
             }
