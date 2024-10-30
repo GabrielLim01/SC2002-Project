@@ -152,7 +152,8 @@ public class AppointmentPatientController {
                             // Check if the timeslot chosen conflicts with any of the patient's existing appointment slots
                             for (int i = 0; i < patient.getAppointments().size(); i++) {
                                 if (appointmentList.get(selector).getDate().equals(patient.getAppointments().get(i).getDate()) &&
-                                        appointmentList.get(selector).getTime().equals(patient.getAppointments().get(i).getTime())) {
+                                        appointmentList.get(selector).getTime().equals(patient.getAppointments().get(i).getTime()) &&
+                                        !patient.getAppointments().get(i).getStatus().equals(Appointment.Status.CANCELLED.toString())) {
                                     isConflictingTimeslot = true;
                                 }
                             }
@@ -408,7 +409,8 @@ public class AppointmentPatientController {
 
                             for (int i = 0; i < patient.getAppointments().size(); i++) {
                                 if (appointmentList.get(selector).getDate().equals(patient.getAppointments().get(i).getDate()) &&
-                                        appointmentList.get(selector).getTime().equals(patient.getAppointments().get(i).getTime())) {
+                                        appointmentList.get(selector).getTime().equals(patient.getAppointments().get(i).getTime()) &&
+                                        !patient.getAppointments().get(i).getStatus().equals(Appointment.Status.CANCELLED.toString())) {
                                     isConflictingTimeslot = true;
                                 }
                             }

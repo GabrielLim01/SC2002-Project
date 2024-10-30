@@ -1,10 +1,10 @@
 package Controllers;
 
+import Models.Appointment;
 import Models.Doctor;
 import Utility.Validator;
 
 import java.util.Scanner;
-import java.util.ArrayList;
 
 public class DoctorController extends UserController {
 
@@ -33,7 +33,7 @@ public class DoctorController extends UserController {
                 System.out.println("\nWelcome back, " + doctor.getName() + "! What would you like to do today?");
                 System.out.println("1. View Medical Record");
                 System.out.println("2. View Personal Schedule");
-                System.out.println("3. Handle Appointment Requests");
+                System.out.println("3. Manage Appointment Requests");
                 System.out.println("4. Exit");
                 input = scanner.nextLine();
                 isValidSelectionType = validator.validateSelectorInput(input, 1, MAX_MENU_RANGE);
@@ -48,7 +48,7 @@ public class DoctorController extends UserController {
                     viewPersonalSchedule(doctor);
                     break;
                 case 3:
-                    appointmentDoctorController.handleApptRequests(doctor);
+                    appointmentDoctorController.manageApptRequests(doctor);
                     break;
                 case 4:
                     break;
@@ -65,11 +65,13 @@ public class DoctorController extends UserController {
         System.out.println("Age: " + doctor.getAge());
     }
 
-    public void viewPersonalSchedule(Doctor doctor){
+    public void viewPersonalSchedule(Doctor doctor) {
         System.out.println("Hello, " + doctor.getName() + "! You are available at the following timeslots:");
         for (int i = 0; i < doctor.getAvailability().size(); i++) {
-            System.out.println(doctor.getAvailability().get(i).getDate() + " " +
-                    doctor.getAvailability().get(i).getTime()); // TO-DO - ADD APPOINTMENT STATUS FLAG TO THIS LATER TOO
+            if (doctor.getAvailability().get(i).getStatus().equals(Appointment.Status.AVAILABLE.toString())) {
+                System.out.println(doctor.getAvailability().get(i).getDate() + " " +
+                        doctor.getAvailability().get(i).getTime());
+            }
         }
     }
 
