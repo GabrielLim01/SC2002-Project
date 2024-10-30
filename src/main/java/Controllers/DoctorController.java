@@ -31,7 +31,7 @@ public class DoctorController extends UserController {
         do {
             do {
                 System.out.println("\nWelcome back, " + doctor.getName() + "! What would you like to do today?");
-                System.out.println("1. View Medical Record");
+                System.out.println("1. View Personal Details");
                 System.out.println("2. View Personal Schedule");
                 System.out.println("3. Manage Appointment Requests");
                 System.out.println("4. Exit");
