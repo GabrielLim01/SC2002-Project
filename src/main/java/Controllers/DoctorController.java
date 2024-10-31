@@ -77,10 +77,10 @@ public class DoctorController extends UserController {
 
     // DEPRECATED
     // Additional method not required in test cases
-//    public void viewPersonalSchedulesOfAllDoctors(ArrayList<Doctor> doctorList){
-//        for (int i = 0; i < doctorList.size(); i++) {
-//            System.out.println(doctorList.get(i).getName() + " is available at the following timeslots:");
-//            doctorList.get(i).getAvailability().forEach(System.out::println);
+//    public void viewPersonalSchedulesOfAllDoctors(ArrayList<Doctor> doctors){
+//        for (int i = 0; i < doctors.size(); i++) {
+//            System.out.println(doctors.get(i).getName() + " is available at the following timeslots:");
+//            doctors.get(i).getAvailability().forEach(System.out::println);
 //            System.out.print("\n");
 //        }
 //    }

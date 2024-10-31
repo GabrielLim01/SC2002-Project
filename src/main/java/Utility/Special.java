@@ -4,7 +4,6 @@ package Utility;
 
 import Controllers.*;
 import Models.*;
-import Utility.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -23,10 +22,10 @@ public class Special {
         DoctorController doctorController = new DoctorController();
 
         // Initialization of data structures
-        ArrayList<Patient> patientList = dp.generatePatientList(dp.readFromCSV("Patient_List.csv"));
-        ArrayList<Doctor> doctorList = dp.generateDoctorList(dp.readFromCSV("Doctor_List.csv"));
-        ArrayList<Appointment> appointmentList = dt.generateAppointmentList(doctorList);
-        dp.updateDoctorsListWithAppointments(doctorList, appointmentList);
+        ArrayList<Patient> patients = dp.generatePatientList(dp.readFromCSV("Patient_List.csv"));
+        ArrayList<Doctor> doctors = dp.generateDoctorList(dp.readFromCSV("Doctor_List.csv"));
+        ArrayList<Appointment> appointments = dt.generateAppointmentsList(doctors);
+        dp.updateDoctorsWithAppointments(doctors, appointments);
 
         // Initialization of local variables
         String input = "";
@@ -63,10 +62,10 @@ public class Special {
                     // big problem here - appointmentList cannot be a static parameter, has to be generated at runtime since appointment availability constantly updates
                     // will need to modify my generation method later
                     // (Oct 30, 2024 update) Actually there is no problem since I am updating the appointments lists directly
-                    patientController.displayMenu(patientList.get(0), doctorList, appointmentList);
+                    patientController.displayMenu(patients.get(0), doctors, appointments);
                     break;
                 case 2:
-                    doctorController.displayMenu(doctorList.get(0));
+                    doctorController.displayMenu(doctors.get(0));
                     break;
                 case 3:
                     System.out.println("The Pharmacist feature has not yet been implemented.");

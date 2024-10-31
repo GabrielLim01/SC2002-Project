@@ -27,7 +27,7 @@ public class PatientController extends UserController {
     boolean isValidSelectionType = true;
 
     // @Override
-    public void displayMenu(Patient patient, ArrayList<Doctor> doctorsList, ArrayList<Appointment> appointmentList) {
+    public void displayMenu(Patient patient, ArrayList<Doctor> doctors, ArrayList<Appointment> appointments) {
         int selector = 0;
         final int MAX_MENU_RANGE = 8;
 
@@ -55,13 +55,13 @@ public class PatientController extends UserController {
                     updatePersonalInfo(patient);
                     break;
                 case 3:
-                    appointmentPatientController.viewAvailAppts(patient, doctorsList, appointmentList);
+                    appointmentPatientController.viewAvailAppts(patient, doctors, appointments);
                     break;
                 case 4:
-                    appointmentPatientController.rescheduleAppt(patient, doctorsList);
+                    appointmentPatientController.rescheduleAppt(patient, doctors);
                     break;
                 case 5:
-                    appointmentPatientController.cancelAppt(patient, doctorsList);
+                    appointmentPatientController.cancelAppt(patient);
                     break;
                 case 6:
                     appointmentPatientController.viewAppts(patient);

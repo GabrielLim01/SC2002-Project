@@ -10,7 +10,6 @@ import Models.*;
 import com.opencsv.*;
 
 import java.io.*;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.time.format.DateTimeFormatter;
@@ -73,7 +72,7 @@ public class DataProcessing {
 
     public ArrayList<Patient> generatePatientList(ArrayList<String> dataList) {
 
-        ArrayList<Patient> patientList = new ArrayList<Patient>();
+        ArrayList<Patient> patients = new ArrayList<Patient>();
 
         for (int i = 0; i < dataList.size(); i++) {
             // substring to remove the first and last characters which are brackets [ ]
@@ -104,14 +103,14 @@ public class DataProcessing {
             String bloodType = temp[4].trim();
             String email = temp[5].trim();
 
-            patientList.add(new Patient(id, name, formattedDateOfBirth, gender, phoneNo, email, bloodType));
+            patients.add(new Patient(id, name, formattedDateOfBirth, gender, phoneNo, email, bloodType));
         }
-        return patientList;
+        return patients;
     }
 
     public ArrayList<Doctor> generateDoctorList(ArrayList<String> dataList) {
 
-        ArrayList<Doctor> doctorList = new ArrayList<Doctor>();
+        ArrayList<Doctor> doctors = new ArrayList<Doctor>();
 
         for (int i = 0; i < dataList.size(); i++) {
             // substring to remove the first and last characters which are brackets [ ]
@@ -128,10 +127,10 @@ public class DataProcessing {
                 }
             }
             int age = Integer.parseInt(temp[4].trim());
-            doctorList.add(new Doctor(id, name, gender, age, null));
+            doctors.add(new Doctor(id, name, gender, age, null));
 
         }
-        return doctorList;
+        return doctors;
     }
 
     // This method is like what, INNER JOIN of two tables in an SQL context?
@@ -141,37 +140,37 @@ public class DataProcessing {
 
     // Might be more efficient with arraylist of arraylists???
 
-    public void updateDoctorsListWithAppointments(ArrayList<Doctor> doctorsList, ArrayList<Appointment> appointmentsList) {
-        for (int i = 0; i < doctorsList.size(); i++) {
+    public void updateDoctorsWithAppointments(ArrayList<Doctor> doctors, ArrayList<Appointment> appointments) {
+        for (int i = 0; i < doctors.size(); i++) {
 
-            ArrayList<Appointment> appointmentsListSubset = new ArrayList<Appointment>();
+            ArrayList<Appointment> appointmentsSubset = new ArrayList<Appointment>();
 
-            for (int j = 0; j < appointmentsList.size(); j++) {
+            for (int j = 0; j < appointments.size(); j++) {
                 // If the name of a doctor in the doctorsList matches the name of their corresponding name in appointment slots,
                 // then those set of appointment slots belongs to that doctor
-                if (doctorsList.get(i).getName().equals(appointmentsList.get(j).getDoctor().getName())) {
+                if (doctors.get(i).getName().equals(appointments.get(j).getDoctor().getName())) {
                     // Add all these slots into a subset of the main Appointment list (the subset is itself another Appointment list)
-                    appointmentsListSubset.add(appointmentsList.get(j));
+                    appointmentsSubset.add(appointments.get(j));
                 }
             }
             // Update the doctor's availability attribute with this list
-            doctorsList.get(i).setAvailability(appointmentsListSubset);
+            doctors.get(i).setAvailability(appointmentsSubset);
         }
     }
 
     // Actually I don't need this method right now
-    // This method lets me get away with not having to pass ArrayList<Appointment> appointmentList as an argument in parent methods
+    // This method lets me get away with not having to pass ArrayList<Appointment> appointments as an argument in parent methods
     // Might need it later
-//    public ArrayList<Appointment> updateAppointmentsList(ArrayList<Doctor> doctorsList){
-//        ArrayList<Appointment> updatedOverallAppointmentsList = new ArrayList<Appointment>();
+//    public ArrayList<Appointment> updateAppointments(ArrayList<Doctor> doctors){
+//        ArrayList<Appointment> updatedAppointments = new ArrayList<Appointment>();
 //
-//        for (int i = 0; i < doctorsList.size(); i++) {
-////            for (int j = 0; j < doctorsList.get(i).getAvailability().size(); j++) {
-////                updatedOverallAppointmentsList.add(doctorsList.get(i).getAvailability().get(j));
+//        for (int i = 0; i < doctors.size(); i++) {
+////            for (int j = 0; j < doctors.get(i).getAvailability().size(); j++) {
+////                updatedAppointments.add(doctors.get(i).getAvailability().get(j));
 ////            }
-//            updatedOverallAppointmentsList.addAll(doctorsList.get(i).getAvailability());
+//            updatedAppointments.addAll(doctors.get(i).getAvailability());
 //        }
 //
-//        return updatedOverallAppointmentsList;
+//        return updatedAppointments;
 //    }
 }

@@ -19,7 +19,7 @@ public class DateTime {
     // default constructor
     public DateTime(){}
 
-    public ArrayList<Appointment> generateAppointmentList(ArrayList<Doctor> doctorList){
+    public ArrayList<Appointment> generateAppointmentsList(ArrayList<Doctor> doctors){
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM uuuu"); // e.g. 01 Jan 2001
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a"); // e.g. 8:00 am
 
@@ -54,17 +54,17 @@ public class DateTime {
 
         // 3. GENERATE APPOINTMENT TIMESLOTS DYNAMICALLY IN A TRIPLE NESTED FOR LOOP
         // DOCTORS { DATES { TIMES { ... } } }
-        ArrayList<Appointment> appointmentsList = new ArrayList<Appointment>();
-        for (int i=0; i <doctorList.size(); i++){
+        ArrayList<Appointment> appointments = new ArrayList<Appointment>();
+        for (int i=0; i <doctors.size(); i++){
             for (int j=0; j < formattedDatesList.size(); j++){
                 for (int k=1; k < timesList.size() + 1; k++){
                     // Appointment ID is a combination of doctor's ID + current index k appended at the end of it
-                    appointmentsList.add(new Appointment(doctorList.get(i).getId() + k, null, doctorList.get(i), formattedDatesList.get(j),
+                    appointments.add(new Appointment(doctors.get(i).getId() + k, null, doctors.get(i), formattedDatesList.get(j),
                             timesList.get(k-1)));
                 }
             }
         }
 
-        return appointmentsList;
+        return appointments;
     }
 }
