@@ -27,7 +27,7 @@ public class InventoryPharmacistController {
     public void submitReplenishmentRequest() {
         System.out.println("Select which medication you would like to replenish:");
         for (int i = 0; i < medicationInventory.getMedications().size(); i++) {
-            System.out.printf("%d: %s\n", i, , medicationInventory.getMedications().get(i).getMedication().getName());
+            System.out.printf("%d: %s\n", i, medicationInventory.getMedications().get(i).getMedication().getName());
         }
 
         int x = scanner.nextInt();

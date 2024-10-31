@@ -24,4 +24,10 @@ public class Medication {
     public void setAmount(int amount) {
         this.amount = amount;
     }
+
+    public void printMedication() {
+        System.out.println(
+            "\n" + this.name + ": " + this.amount
+        );
+    }
 }
