@@ -10,7 +10,7 @@ abstract class AppointmentController {
         System.out.println(
             "\nDoctor: " + appointment.getDoctor().getName() + 
             "\nPatient: " + appointment.getPatient().getName() + 
-            "\nTimeslot: " + appointment.getDate() + " " + appointment.getTime() 
+            "\nTimeslot: " + appointment.getDate() + " " + appointment.getTime() +
             "\nStatus: " + appointment.getStatus() + 
             "\nMedications: " 
         );

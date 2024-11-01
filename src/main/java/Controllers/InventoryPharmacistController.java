@@ -1,6 +1,7 @@
 package Controllers;
 
 import Models.MedicationInventory;
+import Utility.Validator;
 import java.util.Scanner;
 
 public class InventoryPharmacistController {
@@ -12,14 +13,13 @@ public class InventoryPharmacistController {
         this.medicationInventory = medicationInventory;
     }
 
-    Scanner scanner = new Scanner(System.in);
     Validator validator = new Validator();
     String input = "";
     boolean isValidSelectionType = true;
 
     public void viewMedicationInventory() {
         System.out.println("These are the medications in the medication inventory:");
-        for (int i = 0; i < medicationInventory.getMedication().size(); i++) {
+        for (int i = 0; i < medicationInventory.getMedications().size(); i++) {
             System.out.printf("%s: %d\n", medicationInventory.getMedications().get(i).getMedication().getName(), medicationInventory.getMedications().get(i).getMedication().getAmount());
         }
     }
@@ -33,6 +33,6 @@ public class InventoryPharmacistController {
         int x = scanner.nextInt();
         System.out.println("Input the amount to replenish:");
         int amt =  scanner.nextInt();
-        medicationInventory.getMedications().get(x).getMedication().setReplenishmentRequest(amt);
+        medicationInventory.getMedications().get(x).setReplenishmentRequest(amt);
     }
 }

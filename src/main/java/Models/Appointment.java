@@ -1,6 +1,5 @@
 package Models;
 
-import Models.Medication;
 import java.util.ArrayList;
 
 public class Appointment {
@@ -41,7 +40,7 @@ public class Appointment {
         this.date = date;
         this.time = time;
         this.status = Status.AVAILABLE.toString();
-        this.medications = new ArrayList<Medication>;
+        this.medications = new ArrayList<Medication>();
     }
 
     // overloaded constructor - additional parameter Status
@@ -52,7 +51,7 @@ public class Appointment {
         this.date = date;
         this.time = time;
         this.status = status;
-        this.medications = new ArrayList<Medication>;
+        this.medications = new ArrayList<Medication>();
     }
 
     public String getId() {

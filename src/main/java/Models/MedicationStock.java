@@ -1,7 +1,5 @@
 package Models;
 
-import Models.Medication;
-
 public class MedicationStock {
     protected Medication medication;
     protected int replenishmentRequest;

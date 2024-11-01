@@ -6,18 +6,15 @@ import Models.MedicationInventory;
 import Utility.Validator;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class PharmacistController extends UserController {
-    private MedicationInventory medicationInventory;
-    private ArrayList<Doctor> doctors;
     private AppointmentPharmacistController appointmentPharmacistController;
     private InventoryPharmacistController inventoryPharmacistController;
 
     // default constructor
     public PharmacistController(MedicationInventory medicationInventory, ArrayList<Doctor> doctors) {
-        this.medicationInventory = medicationInventory;
-        this.doctors = doctors;
-
+        // no need to store doctors and medication in class, we can directly pass them to the required controllers.
         this.appointmentPharmacistController = new AppointmentPharmacistController(doctors);
         this.inventoryPharmacistController = new InventoryPharmacistController(medicationInventory);
     }
@@ -58,10 +55,10 @@ public class PharmacistController extends UserController {
                     appointmentPharmacistController.viewApptOutcomeRec();
                     break;
                 case 4:
-                    medicationInventory.viewMedicationInventory();
+                    inventoryPharmacistController.viewMedicationInventory();
                     break;
                 case 5:
-                    medicationInventory.submitReplenishmentRequest();
+                    inventoryPharmacistController.submitReplenishmentRequest();
                     break;
                 case 6:
                     break;

@@ -4,7 +4,7 @@ public class Medication {
     protected String name;
     protected int amount;
 
-    public Medication (name, amount) {
+    public Medication(String name, int amount) {
         this.name = name;
         this.amount = amount;
     }

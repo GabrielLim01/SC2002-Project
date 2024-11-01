@@ -10,22 +10,21 @@ public class AppointmentPharmacistController extends AppointmentController {
     protected ArrayList<Doctor> doctors;
 
     // default constructor
-    public AppointmentDoctorController(ArrayList<Doctor> doctors) {
+    public AppointmentPharmacistController(ArrayList<Doctor> doctors) {
         this.doctors = doctors;
     }
 
     Scanner scanner = new Scanner(System.in);
 
     private Appointment selectAppointment() {
-        String input = "";
         Doctor doctor;
         ArrayList<Appointment> appointmentList;
 
         System.out.println("Select the doctor whose appointment you want to view.\n");
-        for (int i=0;i<doctors.length();i++) {
+        for (int i=0;i<doctors.size();i++) {
             System.out.println(
-                i + ": " + doctors.get(i).getName();
-            )
+                i + ": " + doctors.get(i).getName()
+            );
         }
 
         try {
@@ -39,11 +38,11 @@ public class AppointmentPharmacistController extends AppointmentController {
             appointmentList = doctor.getAvailability();
         } else {
             System.out.println("Doctor " + doctor.getName() + " is not available.");
-            return;
+            throw new IllegalArgumentException("error");
         }
 
         System.out.println("Select the appointment you want to view.\n");
-        for (int i=0;i<appointmentList.length();i++) {
+        for (int i=0;i<appointmentList.size();i++) {
             System.out.println(
                 i + ": " + appointmentList.get(i).getPatient().getName() + 
                 " on " + appointmentList.get(i).getDate() + 
@@ -75,7 +74,7 @@ public class AppointmentPharmacistController extends AppointmentController {
 
     public void updatePrescriptionStatus() {
         Appointment appointment;
-        String input;
+        String input = "";
         boolean isValidSelectionType = false;
         Validator validator = new Validator();
         final int MAX_MENU_RANGE = 2;
