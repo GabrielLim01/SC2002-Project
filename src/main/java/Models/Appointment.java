@@ -59,6 +59,10 @@ public class Appointment {
     }
 
     public Patient getPatient() {
+        // return empty patient if null to prevent appointment.getPatient() from breaking
+        if (patient == null) {
+            return new Patient("0", "NONE", "01 Jan 1900", 'X', 0, "NONE", "NONE");
+        }
         return patient;
     }
 

@@ -42,10 +42,11 @@ public class AppointmentPharmacistController extends AppointmentController {
         }
 
         System.out.println("Select the appointment you want to view.\n");
+        System.out.println(appointmentList.size());
         for (int i=0;i<appointmentList.size();i++) {
             System.out.println(
-                i + ": " + appointmentList.get(i).getPatient().getName() + 
-                " on " + appointmentList.get(i).getDate() + 
+                i +  
+                ": Appointment on " + appointmentList.get(i).getDate() + 
                 " at " + appointmentList.get(i).getTime()
             );
         }
@@ -88,17 +89,23 @@ public class AppointmentPharmacistController extends AppointmentController {
             }
         }
         
+        // clear previous input
+        scanner.nextLine();
+
         while (!isValidSelectionType) {
             System.out.println("Select Status: 1-Dispensed 2-Completed");
             input = scanner.nextLine();
+            System.out.println(input);
             isValidSelectionType = validator.validateSelectorInput(input, 1, MAX_MENU_RANGE);
         } 
 
         switch (Integer.parseInt(input)) {
             case 1:
                 appointment.setStatus("DISPENSED");
+                break;
             case 2:
                 appointment.setStatus("COMPLETED");
+                break;
         }
 
         System.out.println("Update Successful.");

@@ -20,7 +20,7 @@ public class InventoryPharmacistController {
     public void viewMedicationInventory() {
         System.out.println("These are the medications in the medication inventory:");
         for (int i = 0; i < medicationInventory.getMedications().size(); i++) {
-            System.out.printf("%s: %d\n", medicationInventory.getMedications().get(i).getMedication().getName(), medicationInventory.getMedications().get(i).getMedication().getAmount());
+            System.out.printf("%s: %d    Replenish: %d\n", medicationInventory.getMedications().get(i).getMedication().getName(), medicationInventory.getMedications().get(i).getMedication().getAmount(), medicationInventory.getMedications().get(i).getReplenishmentRequest());
         }
     }
 
