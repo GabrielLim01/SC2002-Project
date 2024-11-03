@@ -2,22 +2,30 @@
 
 package Utility;
 
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.regex.*;
 
 public class Validator {
+
+    DataProcessing dp = new DataProcessing();
+    ArrayList<String> credentialList = dp.readFromCSV("Credentials.csv");
+
+    Map<String, Map<String, String>> credentialMap = dp.getCredentialmap(credentialList);
 
     // default constructor
     public Validator(){}
 
     // TO-DO:
     // 1. Handle validation logic for incorrect username and/or password combination + corresponding output msg
-    public boolean validateCredential(String input, String fieldType)
-    {
+
+    public boolean validateCredential(String input, String fieldType){
+
         // Regex to check if the username or password is valid
         // Conditions specified in this regex include:
         // 1. Starting character must be in the lowercase or uppercase alphabet
         // 2. The input string must be between 6 and 30 characters
-        String regex = "^[A-Za-z]\\w{5,29}$";
+        String regex = "^[A-Za-z][\\w!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]{5,29}$";
 
         // Compile the regex
         Pattern p = Pattern.compile(regex);
@@ -34,7 +42,30 @@ public class Validator {
             System.out.println("Your " + fieldType + " is invalid! Please try again!");
         }
         // Return true if the username matches the regex
+
         return m.matches();
+    }
+
+    public boolean validateUsername(String username)
+    {
+
+        if (!this.validateCredential(username, "username")){
+            return false;
+        }
+
+        // Check if username is valid. If valid return True
+        return credentialMap.containsKey(username);
+    }
+
+    public boolean validatePassword(String username, String password)
+    {
+        if (!this.validateCredential(password, "password")){
+            return false;
+        }
+
+        System.out.println(credentialMap.get(username).get("Password"));
+        // Check if username is valid. If valid return True
+        return credentialMap.get(username).get("Password").equals(password);
     }
 
     // Checks if user input is an integer, then checks to see whether it falls within the available integer range of options for selection
@@ -103,5 +134,22 @@ public class Validator {
 
         // Return true if the username matches the regex
         return m.matches();
+    }
+
+    // To be used if HashMap.containsKey fails due to object reference error
+    private boolean checkKeyExist(Map<String, Map<String, String>> mapToCheck, String keyToFind){
+        for(String a : mapToCheck.keySet()){
+            System.out.println(a);
+            System.out.println(a.equals(keyToFind));
+            if (a.equals(keyToFind)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String findUserRole(String username){
+
+        return credentialMap.get(username).get("Role");
     }
 }

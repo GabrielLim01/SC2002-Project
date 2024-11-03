@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DataProcessing {
 
@@ -157,6 +159,23 @@ public class DataProcessing {
             // Update the doctor's availability attribute with this list
             doctorsList.get(i).setAvailability(appointmentsListSubset);
         }
+    }
+
+    public Map<String, Map<String, String>> getCredentialmap(ArrayList<String> dataList){
+
+        Map<String, Map<String, String>> credentialMap = new HashMap<>();
+
+        for (int i = 0; i < dataList.size(); i++){
+            Map<String, String> detailsMap = new HashMap<>();
+            String[] details = dataList.get(i).substring(1, dataList.get(i).length() - 1).split(",");
+            detailsMap.put("FullName", details[1].trim());
+            detailsMap.put("Password", details[2].trim());
+            detailsMap.put("Role", details[3].trim());
+
+            credentialMap.put(details[0].trim(), detailsMap);
+        }
+
+        return credentialMap;
     }
 
     // Actually I don't need this method right now

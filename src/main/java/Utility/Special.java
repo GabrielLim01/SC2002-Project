@@ -34,54 +34,47 @@ public class Special {
         final int MAX_MENU_RANGE = 5;
         boolean isValidSelectionType = true;
         boolean isValidInput = true;
+        String username;
+        String role;
 
-        System.out.println("Would you like to test the login/logout feature? (Y/N)");
-        do {
-            input = scanner.nextLine().trim().toUpperCase();
-            isValidInput = validator.validateCharacterInput(input);
-        } while (!isValidInput);
-
-        if (input.charAt(0) == 'Y') {
-            enableLoginFeature();
-        }
+        username = login();
+        role = validator.findUserRole(username);
 
         do {
-            do {
-                System.out.println("\nPlease select a user account type to test:");
-                System.out.println("1. Patient");
-                System.out.println("2. Doctor");
-                System.out.println("3. Pharmacist");
-                System.out.println("4. Administrator");
-                System.out.println("5. Exit");
-                input = scanner.nextLine();
-                isValidSelectionType = validator.validateSelectorInput(input, 1, MAX_MENU_RANGE);
-            } while (!isValidSelectionType);
-
-            selector = Integer.parseInt(input);
-            switch (selector) {
-                case 1:
+            switch (role) {
+                case "Patient":
                     // big problem here - appointmentList cannot be a static parameter, has to be generated at runtime since appointment availability constantly updates
                     // will need to modify my generation method later
                     // (Oct 30, 2024 update) Actually there is no problem since I am updating the appointments lists directly
-                    patientController.displayMenu(patientList.get(0), doctorList, appointmentList);
+                    Patient patientUser = Helper.findPatient(patientList, username);
+                    if (patientUser == null){
+                        System.out.println("ERROR: UNABLE TO FIND PATIENT AFTER LOGIN!");
+                        return;
+                    }
+                    selector = patientController.displayMenu(patientUser, doctorList, appointmentList);
                     break;
-                case 2:
-                    doctorController.displayMenu(doctorList.get(0));
+                case "Doctor":
+                    Doctor doctorUser = Helper.findDoctor(doctorList, username);
+                    if (doctorUser == null){
+                        System.out.println("ERROR: UNABLE TO FIND DOCTOR AFTER LOGIN!");
+                        return;
+                    }
+                    selector = doctorController.displayMenu(doctorUser);
                     break;
-                case 3:
+                case "Pharmacist":
                     System.out.println("The Pharmacist feature has not yet been implemented.");
                     break;
-                case 4:
+                case "Admin":
                     System.out.println("The Administrator feature has not yet been implemented.");
                     break;
-                case 5:
+                default:
                     break;
             }
 
-        } while (selector != MAX_MENU_RANGE);
+        } while (selector < 1);
     }
 
-    public void enableLoginFeature() {
+    public String login() {
         String username, password;
         boolean isValidLoginCredential = true;
         boolean isLoginSuccessful = false;
@@ -95,32 +88,38 @@ public class Special {
                 System.out.print("USERNAME: ");
                 System.out.println("(Hint: The username is User1234)");
                 username = scanner.nextLine();
-                isValidLoginCredential = validator.validateCredential(username, "username");
+                isValidLoginCredential = validator.validateUsername(username);
             } while (!isValidLoginCredential);
             do {
                 System.out.print("PASSWORD: ");
                 System.out.println("(Hint: The password is Pass1234)");
                 password = scanner.nextLine();
-                isValidLoginCredential = validator.validateCredential(password, "password");
-            } while (!isValidLoginCredential);
+                isValidLoginCredential = validator.validatePassword(username, password);
 
-            // Username and password are hardcoded for now for testing purposes
-            if (username.equals("User1234") && password.equals("Pass1234")) {
-                System.out.println("You have successfully authenticated, congratulations!");
-                isLoginSuccessful = true;
-            } else {
-                System.out.println("Oh snap! User login unsuccessful!");
-                currentLoginTries++;
-                difference = maxLoginTries - currentLoginTries;
-                if (difference == 0) {
-                    System.out.println("You have reached the maximum number of login attempts, sorry!");
-                    System.exit(0);  // terminates the program
-                } else if (difference == 1) {
-                    System.out.println("Warning! " + difference + " login attempt remaining!\n");
-                } else {
-                    System.out.println(difference + " login attempts remaining!\n");
+                if (isValidLoginCredential){
+                    System.out.println("You have successfully authenticated, congratulations!");
+                    isLoginSuccessful = true;
                 }
-            }
+
+                else{
+                    System.out.println("Oh snap! User login unsuccessful!");
+                    currentLoginTries++;
+                    difference = maxLoginTries - currentLoginTries;
+                    if (difference == 0) {
+                        System.out.println("You have reached the maximum number of login attempts, sorry!");
+                        System.exit(0);  // terminates the program
+                    } else if (difference == 1) {
+                        System.out.println("Warning! " + difference + " login attempt remaining!\n");
+                    } else {
+                        System.out.println(difference + " login attempts remaining!\n");
+                    }
+                    isLoginSuccessful = false;
+                }
+
+            } while (!isValidLoginCredential || !isLoginSuccessful);
+
         } while (!isLoginSuccessful);
+
+        return username;
     }
 }
