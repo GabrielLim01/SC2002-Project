@@ -1,5 +1,7 @@
 package Models;
 
+import java.util.ArrayList;
+
 public class Appointment {
 
     // attributes
@@ -15,13 +17,15 @@ public class Appointment {
     private String date;
     private String time;
     private String status;
+    private ArrayList<Medication> medications;
 
     public enum Status {
         AVAILABLE,  // default state of appointment, AVAILABLE for booking
         PENDING,    // state when an appointment is booked by a Patient but has yet to be approved/rejected by a Doctor
         CONFIRMED,
         CANCELLED, // should this be REJECTED instead??
-        COMPLETED   // state when the appointment is finished, used for medical records history
+        COMPLETED,  // state when the appointment is finished, used for medical records history
+        DISPENSED // state when the medication has been dispensed.
     }
 
     // default constructor
@@ -36,6 +40,7 @@ public class Appointment {
         this.date = date;
         this.time = time;
         this.status = Status.AVAILABLE.toString();
+        this.medications = new ArrayList<Medication>();
     }
 
     // overloaded constructor - additional parameter Status
@@ -46,6 +51,7 @@ public class Appointment {
         this.date = date;
         this.time = time;
         this.status = status;
+        this.medications = new ArrayList<Medication>();
     }
 
     public String getId() {
@@ -53,6 +59,10 @@ public class Appointment {
     }
 
     public Patient getPatient() {
+        // return empty patient if null to prevent appointment.getPatient() from breaking
+        if (patient == null) {
+            return new Patient("0", "NONE", "01 Jan 1900", 'X', 0, "NONE", "NONE");
+        }
         return patient;
     }
 
@@ -78,6 +88,10 @@ public class Appointment {
 
     public String getStatus() {
         return status;
+    }
+
+    public ArrayList<Medication> getMedications() {
+        return medications;
     }
 
     public void setId(String id) {
@@ -110,5 +124,9 @@ public class Appointment {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setMedications(ArrayList<Medication> medications) {
+        this.medications = medications;
     }
 }

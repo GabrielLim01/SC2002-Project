@@ -141,6 +141,30 @@ public class DataProcessing {
 
     // Might be more efficient with arraylist of arraylists???
 
+    /**
+     * Generates a list of pharmacists from CSV data
+     * @param dataList ArrayList of strings containing pharmacist data
+     * @return ArrayList of Pharmacist objects
+     */
+    public ArrayList<Pharmacist> generatePharmacistList(ArrayList<String> dataList) {
+        ArrayList<Pharmacist> pharmacistList = new ArrayList<>();
+
+        for (String data : dataList) {
+            String[] temp = data.substring(1, data.length() - 1).split(",");
+
+            String id = temp[0].trim();
+            String name = temp[1].trim();
+            char gender = 'M';
+            if (!temp[3].trim().equals("Male")) {
+                gender = temp[3].trim().equals("Female") ? 'F' : 'O';
+            }
+            int age = Integer.parseInt(temp[4].trim());
+
+            pharmacistList.add(new Pharmacist(id, name, gender, age));
+        }
+        return pharmacistList;
+    }
+
     public void updateDoctorsListWithAppointments(ArrayList<Doctor> doctorsList, ArrayList<Appointment> appointmentsList) {
         for (int i = 0; i < doctorsList.size(); i++) {
 
