@@ -58,7 +58,6 @@ public class AppointmentPharmacistController extends AppointmentController {
         }
     }
 
-    // TODO implement properly
     public void viewApptOutcomeRec() {
         Appointment appointment;
         while (true) {
