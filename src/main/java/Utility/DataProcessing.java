@@ -127,7 +127,7 @@ public class DataProcessing {
                 }
             }
             int age = Integer.parseInt(temp[4].trim());
-            doctors.add(new Doctor(id, name, gender, age, null));
+            doctors.add(new Doctor(id, name, gender, age, null, null));
 
         }
         return doctors;

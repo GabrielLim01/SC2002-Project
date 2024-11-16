@@ -27,6 +27,24 @@ public class Special {
         ArrayList<Appointment> appointments = dt.generateAppointmentsList(doctors);
         dp.updateDoctorsWithAppointments(doctors, appointments);
 
+        // Hardcoded assigning patients to doctors
+        // Assign Patient 1 to Doctor 1, and Patient 2 to Doctor 2 as per the order in the csv files
+        // There is no particular reason for assigning them in this particular order,
+        // it's just so that the doctors have a pre-existing patient(s) to view records for (i.e. for testing purposes)
+        ArrayList<Patient> patientForDoctorOne = new ArrayList<>();
+        ArrayList<Patient> patientForDoctorTwo = new ArrayList<>();
+        patientForDoctorOne.add(patients.get(0));
+        patientForDoctorTwo.add(patients.get(1));
+        doctors.get(0).setPatients(patientForDoctorOne);
+        doctors.get(1).setPatients(patientForDoctorTwo);
+
+        // Hardcoded one medical record for the first patient
+        ArrayList<MedicalRecord> medicalRecords = new ArrayList<>();
+        MedicalRecord medicalRecord = new MedicalRecord("MR0001", patients.get(0),
+                "Diagnosed with fever, possible flu", "Prescribed Panadol for the fever");
+        medicalRecords.add(medicalRecord);
+        patients.get(0).setMedicalRecords(medicalRecords);
+
         // Initialization of local variables
         String input = "";
         int selector = 0;
