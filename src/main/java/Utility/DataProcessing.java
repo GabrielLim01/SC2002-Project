@@ -28,46 +28,95 @@ public class DataProcessing {
     // instantiated DateTime object for timeslot generation
     DateTime dt = new DateTime();
 
+    // readFromCSV by Gabriel
+//    public ArrayList<String> readFromCSV(String fileName) {
+//
+//        // getResourceAsStream tries to look for the file in the directory of the class it is invoked from, in this case, src
+//        // so append test/resources/<name of file>.csv to properly locate the directory and file location
+//        InputStream inputStream = DataProcessing.class.getClassLoader().getResourceAsStream(fileName);
+//        // System.out.println(inputStream == null); // DEBUGGING - if false, means the file is successfully located
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+//
+//        ArrayList<String> dataList = new ArrayList<String>();
+//
+//        CSVParser parser = new CSVParserBuilder()
+//                .withSeparator(',')
+//                .withIgnoreQuotations(true)
+//                .build();
+//
+//        CSVReader csvReader = new CSVReaderBuilder(reader)
+//                .withSkipLines(1)       // set withSkipLines to 1 to skip the header row
+//                .withCSVParser(parser)
+//                .build();
+//
+//        // using try-with-resources functionality introduced in Java 7 to automatically close CSVReader instance at the end of code runtime
+//        try (csvReader) {
+//            String[] line;
+//            while ((line = csvReader.readNext()) != null) {
+//                dataList.add(Arrays.toString(line));
+//            }
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        // DEBUGGING
+//        // dataList.forEach(System.out::println);
+//
+//        // Expected output from Staff_List.csv
+//        // [D001, John Smith, Doctor, Male, 45]
+//        // [D002, Emily Clarke, Doctor, Female, 38]
+//        // [P001, Mark Lee, Pharmacist, Male, 29]
+//        // [A001, Sarah Lee, Administrator, Female, 40]
+//
+//        return dataList;
+//    }
+
+    // readFromCSV by Aloysius
     public ArrayList<String> readFromCSV(String fileName) {
+        try {
+            // First try to read from resources folder
+            InputStream inputStream = DataProcessing.class.getClassLoader().getResourceAsStream(fileName);
 
-        // getResourceAsStream tries to look for the file in the directory of the class it is invoked from, in this case, src
-        // so append test/resources/<name of file>.csv to properly locate the directory and file location
-        InputStream inputStream = DataProcessing.class.getClassLoader().getResourceAsStream(fileName);
-        // System.out.println(inputStream == null); // DEBUGGING - if false, means the file is successfully located
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-        ArrayList<String> dataList = new ArrayList<String>();
-
-        CSVParser parser = new CSVParserBuilder()
-                .withSeparator(',')
-                .withIgnoreQuotations(true)
-                .build();
-
-        CSVReader csvReader = new CSVReaderBuilder(reader)
-                .withSkipLines(1)       // set withSkipLines to 1 to skip the header row
-                .withCSVParser(parser)
-                .build();
-
-        // using try-with-resources functionality introduced in Java 7 to automatically close CSVReader instance at the end of code runtime
-        try (csvReader) {
-            String[] line;
-            while ((line = csvReader.readNext()) != null) {
-                dataList.add(Arrays.toString(line));
+            // If not found in resources, try direct file path
+            if (inputStream == null) {
+                String filePath = "src/main/resources/" + fileName;
+                inputStream = new FileInputStream(filePath);
             }
+
+            if (inputStream == null) {
+                throw new FileNotFoundException("Could not find file: " + fileName);
+            }
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            ArrayList<String> dataList = new ArrayList<String>();
+
+            CSVParser parser = new CSVParserBuilder()
+                    .withSeparator(',')
+                    .withIgnoreQuotations(true)
+                    .build();
+
+            CSVReader csvReader = new CSVReaderBuilder(reader)
+                    .withSkipLines(1)
+                    .withCSVParser(parser)
+                    .build();
+
+            try (csvReader) {
+                String[] line;
+                while ((line = csvReader.readNext()) != null) {
+                    dataList.add(Arrays.toString(line));
+                }
+            }
+
+            return dataList;
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Error: Could not find file " + fileName);
+            System.err.println("Please ensure the file exists in src/main/resources/");
+            throw new RuntimeException(e);
         } catch (Exception e) {
+            System.err.println("Error reading file " + fileName);
             throw new RuntimeException(e);
         }
-
-        // DEBUGGING
-        // dataList.forEach(System.out::println);
-
-        // Expected output from Staff_List.csv
-        // [D001, John Smith, Doctor, Male, 45]
-        // [D002, Emily Clarke, Doctor, Female, 38]
-        // [P001, Mark Lee, Pharmacist, Male, 29]
-        // [A001, Sarah Lee, Administrator, Female, 40]
-
-        return dataList;
     }
 
     public ArrayList<Patient> generatePatientList(ArrayList<String> dataList) {
@@ -140,6 +189,32 @@ public class DataProcessing {
 
     // Might be more efficient with arraylist of arraylists???
 
+    /**
+     * Generates a list of pharmacists from CSV data
+     * @param dataList ArrayList of strings containing pharmacist data
+     * @return ArrayList of Pharmacist objects
+     */
+    public ArrayList<Pharmacist> generatePharmacistList(ArrayList<String> dataList) {
+        ArrayList<Pharmacist> pharmacistList = new ArrayList<>();
+
+        for (String data : dataList) {
+            String[] temp = data.substring(1, data.length() - 1).split(",");
+
+            String id = temp[0].trim();
+            String name = temp[1].trim();
+            char gender = 'M';
+            if (!temp[3].trim().equals("Male")) {
+                gender = temp[3].trim().equals("Female") ? 'F' : 'O';
+            }
+            int age = Integer.parseInt(temp[4].trim());
+
+            pharmacistList.add(new Pharmacist(id, name, gender, age));
+        }
+        return pharmacistList;
+    }
+
+    public void updateDoctorsListWithAppointments(ArrayList<Doctor> doctorsList, ArrayList<Appointment> appointmentsList) {
+        for (int i = 0; i < doctorsList.size(); i++) {
     public void updateDoctorsWithAppointments(ArrayList<Doctor> doctors, ArrayList<Appointment> appointments) {
         for (int i = 0; i < doctors.size(); i++) {
 
