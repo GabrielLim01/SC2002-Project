@@ -24,7 +24,7 @@ public class DoctorController extends UserController {
     AppointmentDoctorController appointmentDoctorController = new AppointmentDoctorController();
 
     // @Override
-    public void displayMenu(Doctor doctor) {
+    public int displayMenu(Doctor doctor) {
         int selector = 0;
         final int MAX_MENU_RANGE = 8;
 
@@ -70,6 +70,8 @@ public class DoctorController extends UserController {
                     break;
             }
         } while (selector != MAX_MENU_RANGE);
+
+        return 1;
     }
 
     // THIS IS NOT A TEST CASE FOR THE ASSIGNMENT, THIS IS AN EXTRA FEATURE

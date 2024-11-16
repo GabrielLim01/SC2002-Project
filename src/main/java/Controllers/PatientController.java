@@ -27,7 +27,7 @@ public class PatientController extends UserController {
     boolean isValidSelectionType = true;
 
     // @Override
-    public void displayMenu(Patient patient, ArrayList<Doctor> doctors, ArrayList<Appointment> appointments) {
+    public int displayMenu(Patient patient, ArrayList<Doctor> doctors, ArrayList<Appointment> appointments) {
         int selector = 0;
         final int MAX_MENU_RANGE = 8;
 
@@ -73,6 +73,8 @@ public class PatientController extends UserController {
                     break; //this can be return too, doesn't matter, although it will make the while (selector != MAX_MENU_RANGE) redundant
             }
         } while (selector != MAX_MENU_RANGE);
+
+        return 1;
     }
 
     public void viewPersonalDetails(Patient patient) {
