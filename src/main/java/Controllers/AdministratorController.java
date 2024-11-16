@@ -81,7 +81,7 @@ public class AdministratorController extends UserController {
             return false;
         }
 
-        Doctor newDoctor = new Doctor(id, name, gender, age, new ArrayList<>());
+        Doctor newDoctor = new Doctor(id, name, gender, age, new ArrayList<>(), null);
         doctorList.add(newDoctor);
         return true;
     }

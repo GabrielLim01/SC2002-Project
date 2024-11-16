@@ -38,10 +38,28 @@ public class Special {
         DoctorController doctorController = new DoctorController();
 
         // Initialize data structures
-        ArrayList<Patient> patientList = dp.generatePatientList(dp.readFromCSV("Patient_List.csv"));
-        ArrayList<Doctor> doctorList = dp.generateDoctorList(dp.readFromCSV("Doctor_List.csv"));
-        ArrayList<Appointment> appointmentList = dt.generateAppointmentList(doctorList);
-        dp.updateDoctorsListWithAppointments(doctorList, appointmentList);
+        ArrayList<Patient> patients = dp.generatePatientList(dp.readFromCSV("Patient_List.csv"));
+        ArrayList<Doctor> doctors = dp.generateDoctorList(dp.readFromCSV("Doctor_List.csv"));
+        ArrayList<Appointment> appointments = dt.generateAppointmentsList(doctors);
+        dp.updateDoctorsWithAppointments(doctors, appointments);
+
+        // Hardcoded assigning patients to doctors
+        // Assign Patient 1 to Doctor 1, and Patient 2 to Doctor 2 as per the order in the csv files
+        // There is no particular reason for assigning them in this particular order,
+        // it's just so that the doctors have a pre-existing patient(s) to view records for (i.e. for testing purposes)
+        ArrayList<Patient> patientForDoctorOne = new ArrayList<>();
+        ArrayList<Patient> patientForDoctorTwo = new ArrayList<>();
+        patientForDoctorOne.add(patients.get(0));
+        patientForDoctorTwo.add(patients.get(1));
+        doctors.get(0).setPatients(patientForDoctorOne);
+        doctors.get(1).setPatients(patientForDoctorTwo);
+
+        // Hardcoded one medical record for the first patient
+        ArrayList<MedicalRecord> medicalRecords = new ArrayList<>();
+        MedicalRecord medicalRecord = new MedicalRecord("MR0001", patients.get(0),
+                "Diagnosed with fever, possible flu", "Prescribed Panadol for the fever");
+        medicalRecords.add(medicalRecord);
+        patients.get(0).setMedicalRecords(medicalRecords);
 
         // Local variables
         String input = "";
@@ -77,7 +95,7 @@ public class Special {
             selector = Integer.parseInt(input);
             switch (selector) {
                 case 1:
-                    patientController.displayMenu(patientList.get(0), doctorList, appointmentList);
+                    patientController.displayMenu(patients.get(0), doctors, appointments);
                     break;
                 case 2:
                     doctorController.displayMenu(doctors.get(0));

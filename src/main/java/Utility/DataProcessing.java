@@ -10,6 +10,7 @@ import Models.*;
 import com.opencsv.*;
 
 import java.io.*;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.time.format.DateTimeFormatter;
@@ -213,8 +214,6 @@ public class DataProcessing {
         return pharmacistList;
     }
 
-    public void updateDoctorsListWithAppointments(ArrayList<Doctor> doctorsList, ArrayList<Appointment> appointmentsList) {
-        for (int i = 0; i < doctorsList.size(); i++) {
     public void updateDoctorsWithAppointments(ArrayList<Doctor> doctors, ArrayList<Appointment> appointments) {
         for (int i = 0; i < doctors.size(); i++) {
 
