@@ -45,7 +45,7 @@ public class Patient extends User {
     }
 
     // I think I have a duplicate method that does this in PatientController somewhere, gotta replace it with this
-    public void displayPatientDetails(){
+    public void displayPatientDetails() {
         System.out.println("\nPatient Details:");
         System.out.println("ID: " + getId());
         System.out.println("Name: " + getName());
@@ -56,14 +56,33 @@ public class Patient extends User {
         System.out.println("Blood Type: " + getBloodType());
     }
 
-    public void displayMedicalRecords(){
+    public void displayPastApptOutcomeRecords() {
+        if (!getMedicalRecords().isEmpty()) {
+            System.out.println("\n===== Medical Records History =====");
+            for (int i = 0; i < getMedicalRecords().size(); i++) {
+                System.out.println("\nMedical Record " + (i + 1));
+                System.out.println("Diagnosis: " + getMedicalRecords().get(i).getDiagnosis());
+                System.out.println("Treatment: " + getMedicalRecords().get(i).getTreatment());
+            }
+        } else {
+            System.out.println("Patient has no existing medical records.");
+        }
+    }
+
+    public void displayMedicalRecords() {
         displayPatientDetails();
 
-        System.out.println("\n===== Medical Records History =====");
-        for (int i=0; i < getMedicalRecords().size(); i++){
-            System.out.println("Medical Record " + (i + 1));
-            System.out.println("Diagnosis: " + getMedicalRecords().get(i).getDiagnosis());
-            System.out.println("Treatment: " + getMedicalRecords().get(i).getTreatment());
+        if (!getMedicalRecords().isEmpty()) {
+            System.out.println("\n===== Medical Records History =====");
+
+
+            for (int i = 0; i < getMedicalRecords().size(); i++) {
+                System.out.println("\nMedical Record " + (i + 1));
+                System.out.println("Diagnosis: " + getMedicalRecords().get(i).getDiagnosis());
+                System.out.println("Treatment: " + getMedicalRecords().get(i).getTreatment());
+            }
+        } else {
+            System.out.println("Patient has no existing medical records.");
         }
     }
 
@@ -104,11 +123,11 @@ public class Patient extends User {
         return appointments;
     }
 
-    public int getCurrentAppointmentBookings(){
+    public int getCurrentAppointmentBookings() {
         return currentAppointmentBookings;
     }
 
-    public int getMaxAppointmentBookings(){
+    public int getMaxAppointmentBookings() {
         return maxAppointmentBookings;
     }
 
@@ -148,15 +167,15 @@ public class Patient extends User {
         this.appointments = appointments;
     }
 
-    public void setCurrentAppointmentBookings(int currentAppointmentBookings){
+    public void setCurrentAppointmentBookings(int currentAppointmentBookings) {
         this.currentAppointmentBookings = currentAppointmentBookings;
     }
 
-    public void decrementCurrentAppointmentBookings(){
+    public void decrementCurrentAppointmentBookings() {
         this.currentAppointmentBookings = getCurrentAppointmentBookings() - 1;
     }
 
-    public void incrementCurrentAppointmentBookings(){
+    public void incrementCurrentAppointmentBookings() {
         this.currentAppointmentBookings = getCurrentAppointmentBookings() + 1;
     }
 

@@ -78,8 +78,8 @@ public class AppointmentDoctorController {
                     int index = selector;
 
                     System.out.println("\nAppointment ID: " + pendingList.get(index).getId());
-                    System.out.println("Timeslot: " + pendingList.get(index).getDate() + " " + pendingList.get(index).getTime());
                     System.out.println("Patient: " + pendingList.get(index).getPatient().getName());
+                    System.out.println("Timeslot: " + pendingList.get(index).getDate() + " " + pendingList.get(index).getTime());
 
                     do {
                         do {
@@ -173,6 +173,184 @@ public class AppointmentDoctorController {
                 System.out.println("There are no appointments available for you to approve or reject.");
             }
         } while (updatePendingList);
+    }
+
+    public void viewUpcomingAppts(Doctor doctor) {
+        ArrayList<Appointment> appointments = doctor.getAvailability();
+        ArrayList<Appointment> confirmedAppointments = new ArrayList<>();
+
+        if (!appointments.isEmpty()) {
+            for (int i = 0; i < appointments.size(); i++) {
+                if (appointments.get(i).getStatus().equals(Appointment.Status.CONFIRMED.toString())) {
+                    // Adding of items use cases:
+                    // Case 1: Check whether list is new/empty, allow unrestricted adding of new elements if so
+                    if (confirmedAppointments.isEmpty()) {
+                        confirmedAppointments.add(appointments.get(i));
+                    } else {
+                        // Case 2: Check for duplicate entries and do not add duplicate entries into the list
+                        for (int j = 0; j < confirmedAppointments.size(); j++) {
+                            if (!confirmedAppointments.get(j).getId().equals(appointments.get(i).getId())) {
+                                confirmedAppointments.add(appointments.get(i));
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!confirmedAppointments.isEmpty()) {
+                System.out.println("\nHi, " + doctor.getName() + "! You have the following upcoming appointments scheduled:");
+
+                for (int i = 0; i < confirmedAppointments.size(); i++) {
+                    System.out.println("\nAppointment ID: " + confirmedAppointments.get(i).getId());
+                    System.out.println("Patient: " + confirmedAppointments.get(i).getPatient().getName());
+                    System.out.println("Timeslot: " + confirmedAppointments.get(i).getDate() + " " + confirmedAppointments.get(i).getTime());
+                }
+
+            } else {
+                System.out.println("You have no upcoming appointments scheduled!");
+            }
+        } else {
+            System.out.println("You have no existing appointments!");
+        }
+    }
+
+    // When an appointment is finished, the doctor will use this function to manually change the status of the appointment from CONFIRMED to COMPLETED
+    // After doing so, the doctor will record the outcome of the appointment in the form of a MedicalRecord
+    public void recordApptOutcome(Doctor doctor) {
+
+        // variables for data processing and validation
+        String input = "";
+        int selector = 0;
+        final int MAX_MENU_RANGE = 3;
+        boolean isValidSelectionType = true;
+        boolean isValidInput = true;
+        boolean updateConfirmedList; // every time an appointment status change is successful. this boolean value will be set to true and trigger an update of the doctor's confirmed appointments list
+
+        ArrayList<Appointment> appointments = doctor.getAvailability();
+        ArrayList<Appointment> confirmedAppointments = new ArrayList<>();
+
+        if (!appointments.isEmpty()) {
+
+            do {
+                updateConfirmedList = false;
+
+                for (int i = 0; i < appointments.size(); i++) {
+                    if (appointments.get(i).getStatus().equals(Appointment.Status.CONFIRMED.toString())) {
+                        // Adding of items use cases:
+                        // Case 1: Check whether list is new/empty, allow unrestricted adding of new elements if so
+                        if (confirmedAppointments.isEmpty()) {
+                            confirmedAppointments.add(appointments.get(i));
+                        } else {
+                            // Case 2: Check for duplicate entries and do not add duplicate entries into the list
+                            for (int j = 0; j < confirmedAppointments.size(); j++) {
+                                if (!confirmedAppointments.get(j).getId().equals(appointments.get(i).getId())) {
+                                    confirmedAppointments.add(appointments.get(i));
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (!confirmedAppointments.isEmpty()) {
+
+                    int maxAppointmentsRange = (confirmedAppointments.size() + 1);
+
+                    System.out.println("\nHi, " + doctor.getName() + "! Which appointment would you like to mark as completed?");
+                    for (int i = 0; i < confirmedAppointments.size(); i++) {
+                        System.out.println((i + 1) + ". " + confirmedAppointments.get(i).getDate() + " " + confirmedAppointments.get(i).getTime());
+                    }
+                    System.out.println((confirmedAppointments.size() + 1) + ". Back");
+
+                    do {
+                        input = scanner.nextLine();
+                        isValidSelectionType = validator.validateSelectorInput(input, 1, maxAppointmentsRange);
+                    } while (!isValidSelectionType);
+
+                    selector = (Integer.parseInt(input) - 1);
+
+                    if (selector != (maxAppointmentsRange - 1)) {
+
+                        int index = selector;
+
+                        System.out.println("\nAppointment ID: " + confirmedAppointments.get(index).getId());
+                        System.out.println("Patient: " + confirmedAppointments.get(index).getPatient().getName());
+                        System.out.println("Timeslot: " + confirmedAppointments.get(index).getDate() + " " + confirmedAppointments.get(index).getTime());
+
+                        do {
+                            System.out.println("\nWould you like to mark this patient's appointment as completed? (Y/N)");
+
+                            do {
+                                input = scanner.nextLine().trim().toUpperCase();
+                                isValidInput = validator.validateCharacterInput(input);
+                            } while (!isValidInput);
+
+                            if (input.charAt(0) == 'Y') {
+
+                                // Set doctor's side of the appointment to COMPLETED
+                                confirmedAppointments.get(index).setStatus(Appointment.Status.COMPLETED.toString());
+                                System.out.println("DEBUGGING - DOCTOR APPT STATUS - " + confirmedAppointments.get(index).getStatus());
+
+                                Patient patient = confirmedAppointments.get(index).getPatient();
+                                ArrayList<Appointment> patientAppointments = patient.getAppointments();
+
+                                // Iterate over patient's appointments, then set their side of the appointment to COMPLETED
+                                for (int i = 0; i < patientAppointments.size(); i++) {
+                                     if (confirmedAppointments.get(index).getId().equals(patientAppointments.get(i).getId())) {
+                                        patientAppointments.get(i).setStatus(Appointment.Status.COMPLETED.toString());
+                                         System.out.println("DEBUGGING - PATIENT APPT STATUS - " + patientAppointments.get(i).getStatus());
+                                    }
+                                }
+
+                                // DEBUGGING
+                                System.out.println("\nDEBUGGING - Doctor's appointments and statuses");
+                                appointments.forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
+                                System.out.println("\nDEBUGGING - Patient's appointments and statuses");
+                                patientAppointments.forEach(s -> System.out.println(s.getId() + " " + s.getStatus()));
+
+                                // Decrement the patient's current appointment bookings by 1 to allow the patient to book once more
+                                patient.decrementCurrentAppointmentBookings();
+
+                                confirmedAppointments.remove(confirmedAppointments.get(index));
+                                updateConfirmedList = true;
+
+                                // After setting both sides to COMPLETED, the doctor needs to create a new medical record for the patient based on the results of this appointment
+
+                                // We need to generate a dynamic ID for the medical record to avoid clashes (essentially, the ID is a primary key)
+                                int id = patient.getMedicalRecords().size();
+                                // This makes the ID unique, but only works up to MR0009 because this is semi-hardcoded
+                                // Implement more robust logic later for dynamic ID generation to retain the 6-character code format for MR0010 and higher
+
+                                String diagnosis, treatment;
+                                System.out.println("\nPlease enter a message for the diagnosis.");
+                                diagnosis = scanner.nextLine();
+                                System.out.println("Please enter a message for the treatment.");
+                                treatment = scanner.nextLine();
+
+                                if (!diagnosis.isEmpty()) {
+                                    diagnosis = "(No diagnosis given)";
+                                }
+
+                                if (!treatment.isEmpty()) {
+                                    treatment = "(No treatment given)";
+                                }
+
+                                ArrayList<MedicalRecord> medicalRecords = patient.getMedicalRecords();
+                                MedicalRecord medicalRecord = new MedicalRecord("MR000" + (id + 1), patient, diagnosis, treatment);
+                                medicalRecords.add(medicalRecord);
+                                patient.setMedicalRecords(medicalRecords);
+                                System.out.println("Medical record successfully added for patient " + patient.getName() + "!");
+                                break;
+                            }
+
+                        } while (input.charAt(0) != 'N' && !updateConfirmedList);
+                    }
+                } else {
+                    System.out.println("There are no appointments available for you to mark as completed.");
+                }
+            } while (updateConfirmedList);
+        } else {
+            System.out.println("You have no existing appointments!");
+        }
     }
 
     // NOT IN USE AS OF OCT 30, 2024

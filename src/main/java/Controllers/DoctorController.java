@@ -26,7 +26,7 @@ public class DoctorController extends UserController {
     // @Override
     public void displayMenu(Doctor doctor) {
         int selector = 0;
-        final int MAX_MENU_RANGE = 6;
+        final int MAX_MENU_RANGE = 8;
 
         do {
             do {
@@ -36,7 +36,9 @@ public class DoctorController extends UserController {
                 System.out.println("3. Update Patient Medical Records");
                 System.out.println("4. View Personal Schedule");
                 System.out.println("5. Manage Appointment Requests");
-                System.out.println("6. Exit");
+                System.out.println("6. View Upcoming Appointments");
+                System.out.println("7. Record Appointment Outcome");
+                System.out.println("8. Exit");
                 input = scanner.nextLine();
                 isValidSelectionType = validator.validateSelectorInput(input, 1, MAX_MENU_RANGE);
             } while (!isValidSelectionType);
@@ -59,6 +61,12 @@ public class DoctorController extends UserController {
                     appointmentDoctorController.manageApptRequests(doctor);
                     break;
                 case 6:
+                    appointmentDoctorController.viewUpcomingAppts(doctor);
+                    break;
+                case 7:
+                    appointmentDoctorController.recordApptOutcome(doctor);
+                    break;
+                case 8:
                     break;
             }
         } while (selector != MAX_MENU_RANGE);
@@ -139,12 +147,12 @@ public class DoctorController extends UserController {
 
                     do {
                         input = scanner.nextLine();
-                        isValidSelectionType = validator.validateSelectorInput(input, 1, maxPatientsRange);
+                        isValidSelectionType = validator.validateSelectorInput(input, 1, maxRecordsRange);
                     } while (!isValidSelectionType);
 
                     selector = (Integer.parseInt(input) - 1);
 
-                    if (selector != (maxPatientsRange - 1)) {
+                    if (selector != (maxRecordsRange - 1)) {
                         String diagnosis, treatment;
                         System.out.println("\nPlease enter a new message for the diagnosis, or leave it empty to keep it unchanged:");
                         diagnosis = scanner.nextLine();

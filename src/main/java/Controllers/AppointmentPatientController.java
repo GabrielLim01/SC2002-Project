@@ -428,7 +428,7 @@ public class AppointmentPatientController {
 
     // View past appointment outcome records
     public void viewApptOutcomeRec(Patient patient) {
-        System.out.println("この機能はまだ完成したみたい、ごめんなさいね");
+        patient.displayPastApptOutcomeRecords();
     }
 
 // ADDITIONAL METHODS NOT REQUIRED BY TEST CASES
