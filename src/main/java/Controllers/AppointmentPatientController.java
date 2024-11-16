@@ -7,7 +7,7 @@ import Utility.Validator;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class AppointmentPatientController {
+public class AppointmentPatientController extends AppointmentController{
     // default constructor
     public AppointmentPatientController() {
     }

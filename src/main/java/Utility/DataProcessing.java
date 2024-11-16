@@ -173,4 +173,22 @@ public class DataProcessing {
 //
 //        return updatedAppointments;
 //    }
+
+    public MedicationInventory generateMedicationList(ArrayList<String> dataList) {
+
+        ArrayList<MedicationStock> medicationList = new ArrayList<MedicationStock>();
+
+        for (int i = 0; i < dataList.size(); i++) {
+            // substring to remove the first and last characters which are brackets [ ]
+            // then split it using a comma delimiter to allow iteration over the individual elements of data
+            String[] temp = dataList.get(i).substring(1, dataList.get(i).length() - 1).split(",");
+            String name = temp[0].trim();
+            int initialStockInt = Integer.parseInt(temp[1].trim());
+            int LowStockInt = Integer.parseInt(temp[2].trim());
+            Medication med = new Medication(name, initialStockInt);
+            medicationList.add(new MedicationStock(med, -1));
+        }
+        MedicationInventory mi = new MedicationInventory(medicationList);
+        return mi;
+    }
 }

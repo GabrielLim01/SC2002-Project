@@ -6,7 +6,7 @@ import Utility.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-public class AppointmentDoctorController {
+public class AppointmentDoctorController extends AppointmentController {
 
     // default constructor
     public AppointmentDoctorController() {
