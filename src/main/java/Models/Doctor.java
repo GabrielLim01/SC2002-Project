@@ -11,19 +11,21 @@ public class Doctor extends User {
     private int age;
     private String role;
     private ArrayList<Appointment> availability;
+    private ArrayList<Patient> patients;    // Represents a list of patients under the doctor's care
 
     // default constructor
     public Doctor() {
     }
 
     // standard constructor
-    public Doctor(String id, String name, char gender, int age, ArrayList<Appointment> availability) {
+    public Doctor(String id, String name, char gender, int age, ArrayList<Appointment> availability, ArrayList<Patient> patients) {
         this.id = id;
         this.name = name;
         this.gender = gender;
         this.age = age;
         this.role = Roles.DOCTOR.toString();
         this.availability = availability;
+        this.patients = patients;
     }
 
     public String getId() {
@@ -72,5 +74,13 @@ public class Doctor extends User {
 
     public void setAvailability(ArrayList<Appointment> availability) {
         this.availability = availability;
+    }
+
+    public ArrayList<Patient> getPatients() {
+        return patients;
+    }
+
+    public void setPatients(ArrayList<Patient> patients) {
+        this.patients = patients;
     }
 };

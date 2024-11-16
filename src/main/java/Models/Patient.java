@@ -22,6 +22,7 @@ public class Patient extends User {
     private int currentAppointmentBookings;
     private int maxAppointmentBookings; // this is the field
     private final int MAX_APPOINTMENT_BOOKINGS = 2; // this is the actual value
+    private ArrayList<MedicalRecord> medicalRecords;
 
     // default constructor
     public Patient() {
@@ -40,8 +41,52 @@ public class Patient extends User {
         this.appointments = new ArrayList<Appointment>();
         this.currentAppointmentBookings = 0;
         this.maxAppointmentBookings = MAX_APPOINTMENT_BOOKINGS;
+        this.medicalRecords = new ArrayList<MedicalRecord>();
     }
 
+    // I think I have a duplicate method that does this in PatientController somewhere, gotta replace it with this
+    public void displayPatientDetails() {
+        System.out.println("\nPatient Details:");
+        System.out.println("ID: " + getId());
+        System.out.println("Name: " + getName());
+        System.out.println("Date Of Birth: " + getDateOfBirth().toString());
+        System.out.println("Gender: " + getGender());
+        System.out.println("Phone Number: " + getPhoneNo());
+        System.out.println("Email: " + getEmail());
+        System.out.println("Blood Type: " + getBloodType());
+    }
+
+    public void displayPastApptOutcomeRecords() {
+        if (!getMedicalRecords().isEmpty()) {
+            System.out.println("\n===== Medical Records History =====");
+            for (int i = 0; i < getMedicalRecords().size(); i++) {
+                System.out.println("\nMedical Record " + (i + 1));
+                System.out.println("Diagnosis: " + getMedicalRecords().get(i).getDiagnosis());
+                System.out.println("Treatment: " + getMedicalRecords().get(i).getTreatment());
+            }
+        } else {
+            System.out.println("Patient has no existing medical records.");
+        }
+    }
+
+    public void displayMedicalRecords() {
+        displayPatientDetails();
+
+        if (!getMedicalRecords().isEmpty()) {
+            System.out.println("\n===== Medical Records History =====");
+
+
+            for (int i = 0; i < getMedicalRecords().size(); i++) {
+                System.out.println("\nMedical Record " + (i + 1));
+                System.out.println("Diagnosis: " + getMedicalRecords().get(i).getDiagnosis());
+                System.out.println("Treatment: " + getMedicalRecords().get(i).getTreatment());
+            }
+        } else {
+            System.out.println("Patient has no existing medical records.");
+        }
+    }
+
+    // getters and setters
     public String getId() {
         return id;
     }
@@ -78,11 +123,11 @@ public class Patient extends User {
         return appointments;
     }
 
-    public int getCurrentAppointmentBookings(){
+    public int getCurrentAppointmentBookings() {
         return currentAppointmentBookings;
     }
 
-    public int getMaxAppointmentBookings(){
+    public int getMaxAppointmentBookings() {
         return maxAppointmentBookings;
     }
 
@@ -122,16 +167,24 @@ public class Patient extends User {
         this.appointments = appointments;
     }
 
-    public void setCurrentAppointmentBookings(int currentAppointmentBookings){
+    public void setCurrentAppointmentBookings(int currentAppointmentBookings) {
         this.currentAppointmentBookings = currentAppointmentBookings;
     }
 
-    public void decrementCurrentAppointmentBookings(){
+    public void decrementCurrentAppointmentBookings() {
         this.currentAppointmentBookings = getCurrentAppointmentBookings() - 1;
     }
 
-    public void incrementCurrentAppointmentBookings(){
+    public void incrementCurrentAppointmentBookings() {
         this.currentAppointmentBookings = getCurrentAppointmentBookings() + 1;
+    }
+
+    public ArrayList<MedicalRecord> getMedicalRecords() {
+        return medicalRecords;
+    }
+
+    public void setMedicalRecords(ArrayList<MedicalRecord> medicalRecords) {
+        this.medicalRecords = medicalRecords;
     }
 };
 
