@@ -21,6 +21,7 @@ public class Appointment {
 
     public enum Status {
         AVAILABLE,  // default state of appointment, AVAILABLE for booking
+        UNAVAILABLE, // set by doctor when they are not free
         PENDING,    // state when an appointment is booked by a Patient but has yet to be approved/rejected by a Doctor
         CONFIRMED,
         CANCELLED, // should this be REJECTED instead??

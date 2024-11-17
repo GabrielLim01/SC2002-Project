@@ -15,6 +15,82 @@ public class AppointmentDoctorController extends AppointmentController {
     Scanner scanner = new Scanner(System.in);
     Validator validator = new Validator();
 
+    public void setApptAvailability(Doctor doctor) {
+
+        String input = "";
+        int selector = 0;
+        final int MAX_MENU_RANGE = 3;
+        boolean isValidSelectionType = true;
+        boolean isValidInput = true;
+        boolean updateAppointmentsList;
+
+        ArrayList<Appointment> appointments = doctor.getAvailability();
+
+        if (!appointments.isEmpty()) {
+            do {
+                updateAppointmentsList = false;
+
+                System.out.println("\nYour apppointments' statuses are as follows:");
+                appointments.forEach(s -> System.out.println(s.getId() + " - " + s.getStatus()));
+
+                int maxAppointmentsRange = (appointments.size() + 1);
+
+                System.out.println("\nYou can change the status of AVAILABLE appointments to UNAVAILABLE, and vice versa.");
+
+                do {
+                    System.out.println("Which appointment would you like to manage?");
+                    for (int i = 0; i < appointments.size(); i++) {
+                        System.out.println((i + 1) + ". " + appointments.get(i).getDate() + " " + appointments.get(i).getTime());
+                    }
+                    System.out.println((appointments.size() + 1) + ". Back");
+
+                    do {
+                        input = scanner.nextLine();
+                        isValidSelectionType = validator.validateSelectorInput(input, 1, maxAppointmentsRange);
+                    } while (!isValidSelectionType);
+
+                    selector = (Integer.parseInt(input) - 1);
+
+                    if (selector != (maxAppointmentsRange - 1)) {
+                        if (appointments.get(selector).getStatus().equals(Appointment.Status.AVAILABLE.toString())) {
+                            System.out.println("Would you like to set this appointment's status to UNAVAILABLE? (Y/N)");
+
+                            do {
+                                input = scanner.nextLine().trim().toUpperCase();
+                                isValidInput = validator.validateCharacterInput(input);
+                            } while (!isValidInput);
+
+                            if (input.charAt(0) == 'Y') {
+                                appointments.get(selector).setStatus(Appointment.Status.UNAVAILABLE.toString());
+                                System.out.println("Appointment status has been changed!");
+                                updateAppointmentsList = true;
+                                break;
+                            }
+                        } else if (appointments.get(selector).getStatus().equals(Appointment.Status.UNAVAILABLE.toString())) {
+                            System.out.println("\nWould you like to set this appointment's status to AVAILABLE? (Y/N)");
+
+                            do {
+                                input = scanner.nextLine().trim().toUpperCase();
+                                isValidInput = validator.validateCharacterInput(input);
+                            } while (!isValidInput);
+
+                            if (input.charAt(0) == 'Y') {
+                                appointments.get(selector).setStatus(Appointment.Status.AVAILABLE.toString());
+                                System.out.println("Appointment status has been changed!");
+                                updateAppointmentsList = true;
+                                break;
+                            }
+                        } else {
+                            System.out.println("You can only modify the status of AVAILABLE and UNAVAILABLE appointments.");
+                        }
+                    }
+                } while (selector != (maxAppointmentsRange - 1) && !updateAppointmentsList);
+            } while (updateAppointmentsList);
+        } else {
+            System.out.println("You have no appointment slots!");
+        }
+    }
+
     public void manageApptRequests(Doctor doctor) {
 
         // variables for data processing and validation
@@ -295,9 +371,9 @@ public class AppointmentDoctorController extends AppointmentController {
 
                                 // Iterate over patient's appointments, then set their side of the appointment to COMPLETED
                                 for (int i = 0; i < patientAppointments.size(); i++) {
-                                     if (confirmedAppointments.get(index).getId().equals(patientAppointments.get(i).getId())) {
+                                    if (confirmedAppointments.get(index).getId().equals(patientAppointments.get(i).getId())) {
                                         patientAppointments.get(i).setStatus(Appointment.Status.COMPLETED.toString());
-                                         System.out.println("DEBUGGING - PATIENT APPT STATUS - " + patientAppointments.get(i).getStatus());
+                                        System.out.println("DEBUGGING - PATIENT APPT STATUS - " + patientAppointments.get(i).getStatus());
                                     }
                                 }
 
