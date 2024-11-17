@@ -10,7 +10,6 @@ import Models.*;
 import com.opencsv.*;
 
 import java.io.*;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.time.format.DateTimeFormatter;
@@ -198,7 +197,7 @@ public class DataProcessing {
      * @return ArrayList of Pharmacist objects
      */
     public ArrayList<Pharmacist> generatePharmacistList(ArrayList<String> dataList) {
-        ArrayList<Pharmacist> pharmacistList = new ArrayList<>();
+        ArrayList<Pharmacist> pharmacists = new ArrayList<>();
 
         for (String data : dataList) {
             String[] temp = data.substring(1, data.length() - 1).split(",");
@@ -211,9 +210,9 @@ public class DataProcessing {
             }
             int age = Integer.parseInt(temp[4].trim());
 
-            pharmacistList.add(new Pharmacist(id, name, gender, age));
+            pharmacists.add(new Pharmacist(id, name, gender, age));
         }
-        return pharmacistList;
+        return pharmacists;
     }
 
     public void updateDoctorsWithAppointments(ArrayList<Doctor> doctors, ArrayList<Appointment> appointments) {

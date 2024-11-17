@@ -34,8 +34,8 @@ public class PharmacistController extends UserController {
             do {
                 System.out.println("\nWelcome back, " + pharmacist.getName() + "! What would you like to do today?");
                 System.out.println("1. View Personal Details");
-                System.out.println("2. Update Prescription Status");
-                System.out.println("3. View Appointment Outcome Record");
+                System.out.println("2. View Appointment Outcome Record");
+                System.out.println("3. Update Prescription Status");
                 System.out.println("4. View Medication Inventory");
                 System.out.println("5. Submit Replenishment Request");
                 System.out.println("6. Exit");
@@ -49,10 +49,10 @@ public class PharmacistController extends UserController {
                     viewPersonalDetails(pharmacist);
                     break;
                 case 2:
-                    appointmentPharmacistController.updatePrescriptionStatus();
+                    appointmentPharmacistController.viewApptOutcomeRec();
                     break;
                 case 3:
-                    appointmentPharmacistController.viewApptOutcomeRec();
+                    appointmentPharmacistController.updatePrescriptionStatus();
                     break;
                 case 4:
                     inventoryPharmacistController.viewMedicationInventory();
