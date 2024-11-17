@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Special class for testing functionality of the Hospital Management System
+ * Driver class for testing functionality of the Hospital Management System
  */
-public class Special {
+public class Driver {
     private Scanner scanner;
     private Validator validator;
     private DataProcessing dp;
@@ -21,7 +21,7 @@ public class Special {
     /**
      * Constructor initializes required objects
      */
-    public Special() {
+    public Driver() {
         this.scanner = new Scanner(System.in);
         this.validator = new Validator();
         this.dp = new DataProcessing();
@@ -40,6 +40,7 @@ public class Special {
         // Initialize data structures
         ArrayList<Patient> patients = dp.generatePatientList(dp.readFromCSV("Patient_List.csv"));
         ArrayList<Doctor> doctors = dp.generateDoctorList(dp.readFromCSV("Doctor_List.csv"));
+        ArrayList<Pharmacist> pharmacists = dp.generatePharmacistList(dp.readFromCSV("Pharmacist_List.csv"));
         ArrayList<Appointment> appointments = dt.generateAppointmentsList(doctors);
         dp.updateDoctorsWithAppointments(doctors, appointments);
 
@@ -60,6 +61,10 @@ public class Special {
                 "Diagnosed with fever, possible flu", "Prescribed Panadol for the fever");
         medicalRecords.add(medicalRecord);
         patients.get(0).setMedicalRecords(medicalRecords);
+
+        // Pharmacist stuff
+        MedicationInventory mi = dp.generateMedicationList(dp.readFromCSV("Medicine_List.csv"));
+        PharmacistController pc = new PharmacistController(mi, doctors);
 
         // Local variables
         String input = "";
@@ -101,7 +106,7 @@ public class Special {
                     doctorController.displayMenu(doctors.get(0));
                     break;
                 case 3:
-                    System.out.println("The Pharmacist feature has not yet been implemented.");
+                    pc.displayMenu(pharmacists.get(0));
                     break;
                 case 4:
                     testAdministratorFunctionality();
