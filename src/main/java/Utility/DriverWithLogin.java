@@ -2,7 +2,10 @@
 
 package Utility;
 
-import Controllers.*;
+import Controllers.AdministratorController;
+import Controllers.DoctorController;
+import Controllers.PatientController;
+import Controllers.PharmacistController;
 import Models.*;
 
 import java.util.ArrayList;
@@ -11,7 +14,7 @@ import java.util.Scanner;
 /**
  * Driver class for testing functionality of the Hospital Management System
  */
-public class Driver {
+public class DriverWithLogin {
     private Scanner scanner;
     private Validator validator;
     private DataProcessing dp;
@@ -21,7 +24,7 @@ public class Driver {
     /**
      * Constructor initializes required objects
      */
-    public Driver() {
+    public DriverWithLogin() {
         this.scanner = new Scanner(System.in);
         this.validator = new Validator();
         this.dp = new DataProcessing();
@@ -72,49 +75,52 @@ public class Driver {
         final int MAX_MENU_RANGE = 5;
         boolean isValidSelectionType = true;
         boolean isValidInput = true;
+        String username;
+        String role;
 
-        // Test login feature
-//        System.out.println("Would you like to test the login/logout feature? (Y/N)");
-//        do {
-//            input = scanner.nextLine().trim().toUpperCase();
-//            isValidInput = validator.validateCharacterInput(input);
-//        } while (!isValidInput);
-//
-//        if (input.charAt(0) == 'Y') {
-//            enableLoginFeature();
-//        }
+        username = login();
+        role = validator.findUserRole(username);
 
-        // Main menu loop
         do {
-            do {
-                System.out.println("\nPlease select a user account type to test:");
-                System.out.println("1. Patient");
-                System.out.println("2. Doctor");
-                System.out.println("3. Pharmacist");
-                System.out.println("4. Administrator");
-                System.out.println("5. Exit");
-                input = scanner.nextLine();
-                isValidSelectionType = validator.validateSelectorInput(input, 1, MAX_MENU_RANGE);
-            } while (!isValidSelectionType);
+            switch (role) {
+                case "Patient":
+                    // patientController.displayMenu(patients.get(0), doctors, appointments);
 
-            selector = Integer.parseInt(input);
-            switch (selector) {
-                case 1:
-                    patientController.displayMenu(patients.get(0), doctors, appointments);
+                    Patient patientUser = Helper.findPatient(patients, username);
+                    if (patientUser == null) {
+                        System.out.println("ERROR: UNABLE TO FIND PATIENT AFTER LOGIN!");
+                        return;
+                    }
+                    selector = patientController.displayMenu(patientUser, doctors, appointments);
+
                     break;
-                case 2:
-                    doctorController.displayMenu(doctors.get(0));
+                case "Doctor":
+                    //doctorController.displayMenu(doctors.get(0));
+
+                    Doctor doctorUser = Helper.findDoctor(doctors, username);
+                    if (doctorUser == null) {
+                        System.out.println("ERROR: UNABLE TO FIND DOCTOR AFTER LOGIN!");
+                        return;
+                    }
+                    selector = doctorController.displayMenu(doctorUser);
                     break;
-                case 3:
-                    pc.displayMenu(pharmacists.get(0));
+                case "Pharmacist":
+                    Pharmacist pharmacistUser = Helper.findPharmacist(pharmacists, username);
+                    if (pharmacistUser == null) {
+                        System.out.println("ERROR: UNABLE TO FIND PHARMACIST AFTER LOGIN!");
+                        return;
+                    }
+                    pc.displayMenu(pharmacistUser);
+                    selector = 1;
                     break;
-                case 4:
+                case "Administrator":
                     testAdministratorFunctionality();
+                    selector = 1;
                     break;
-                case 5:
+                default:
                     break;
             }
-        } while (selector != MAX_MENU_RANGE);
+        } while (selector < 1);
     }
 
     /**
@@ -238,29 +244,28 @@ public class Driver {
     /**
      * Tests login functionality
      */
-//    public void enableLoginFeature() {
-//        String username, password;
-//        boolean isValidLoginCredential = true;
-//        boolean isLoginSuccessful = false;
-//        int currentLoginTries = 0;
-//        final int maxLoginTries = 5;
-//        int difference;
-//
-//        System.out.println("Welcome to the Hospital Management System! Please input your user credentials:");
-//        do {
-//            do {
-//                System.out.print("USERNAME: ");
-//                System.out.println("(Hint: The username is User1234)");
-//                username = scanner.nextLine();
-//                isValidLoginCredential = validator.validateCredential(username, "username");
-//            } while (!isValidLoginCredential);
-//            do {
-//                System.out.print("PASSWORD: ");
-//                System.out.println("(Hint: The password is Pass1234)");
-//                password = scanner.nextLine();
-//                isValidLoginCredential = validator.validateCredential(password, "password");
-//            } while (!isValidLoginCredential);
-//
+    public String login() {
+        String username, password;
+        boolean isValidLoginCredential = true;
+        boolean isLoginSuccessful = false;
+        int currentLoginTries = 0;
+        final int maxLoginTries = 5;
+        int difference;
+
+        System.out.println("Welcome to the Hospital Management System! Please input your user credentials:");
+        do {
+            do {
+                System.out.print("USERNAME: ");
+                System.out.println("(Hint: The username is your ID (e.g. A00001))");
+                username = scanner.nextLine();
+                isValidLoginCredential = validator.validateUsername(username);
+            } while (!isValidLoginCredential);
+            do {
+                System.out.print("PASSWORD: ");
+                System.out.println("(Hint: The password is P@ssw0rd)");
+                password = scanner.nextLine();
+                isValidLoginCredential = validator.validatePassword(username, password);
+
 //            if (username.equals("User1234") && password.equals("Pass1234")) {
 //                System.out.println("You have successfully authenticated, congratulations!");
 //                isLoginSuccessful = true;
@@ -277,6 +282,27 @@ public class Driver {
 //                    System.out.println(difference + " login attempts remaining!\n");
 //                }
 //            }
-//        } while (!isLoginSuccessful);
-//    }
+                if (isValidLoginCredential) {
+                    System.out.println("You have successfully authenticated, congratulations!");
+                    isLoginSuccessful = true;
+                } else {
+                    System.out.println("Oh snap! User login unsuccessful!");
+                    currentLoginTries++;
+                    difference = maxLoginTries - currentLoginTries;
+                    if (difference == 0) {
+                        System.out.println("You have reached the maximum number of login attempts, sorry!");
+                        System.exit(0);  // terminates the program
+                    } else if (difference == 1) {
+                        System.out.println("Warning! " + difference + " login attempt remaining!\n");
+                    } else {
+                        System.out.println(difference + " login attempts remaining!\n");
+                    }
+                    isLoginSuccessful = false;
+                }
+            } while (!isValidLoginCredential || !isLoginSuccessful);
+
+        } while (!isLoginSuccessful);
+
+        return username;
+    }
 }
