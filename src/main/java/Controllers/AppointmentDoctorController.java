@@ -402,11 +402,11 @@ public class AppointmentDoctorController extends AppointmentController {
                                 System.out.println("Please enter a message for the treatment.");
                                 treatment = scanner.nextLine();
 
-                                if (!diagnosis.isEmpty()) {
+                                if (diagnosis.isEmpty()) {
                                     diagnosis = "(No diagnosis given)";
                                 }
 
-                                if (!treatment.isEmpty()) {
+                                if (treatment.isEmpty()) {
                                     treatment = "(No treatment given)";
                                 }
 

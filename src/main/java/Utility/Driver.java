@@ -132,7 +132,7 @@ public class Driver {
                 System.out.println("1. Test Staff Management");
                 System.out.println("2. Test Appointment Management");
                 System.out.println("3. Test Inventory Management");
-                System.out.println("4. Back");
+                System.out.println("4. Log Out");
                 input = scanner.nextLine();
                 isValidSelectionType = validator.validateSelectorInput(input, 1, MAX_MENU_RANGE);
             } while (!isValidSelectionType);
