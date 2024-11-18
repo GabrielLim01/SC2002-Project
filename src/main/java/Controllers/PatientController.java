@@ -41,7 +41,7 @@ public class PatientController extends UserController {
                 System.out.println("5. Cancel An Appointment");
                 System.out.println("6. View Appointments");
                 System.out.println("7. View Past Appointment Outcome Records");
-                System.out.println("8. Exit");
+                System.out.println("8. Log Out");
                 input = scanner.nextLine();
                 isValidSelectionType = validator.validateSelectorInput(input, 1, MAX_MENU_RANGE);
             } while (!isValidSelectionType);

@@ -38,7 +38,7 @@ public class PharmacistController extends UserController {
                 System.out.println("3. Update Prescription Status");
                 System.out.println("4. View Medication Inventory");
                 System.out.println("5. Submit Replenishment Request");
-                System.out.println("6. Exit");
+                System.out.println("6. Log Out");
                 input = scanner.nextLine();
                 isValidSelectionType = validator.validateSelectorInput(input, 1, MAX_MENU_RANGE);
             } while (!isValidSelectionType);

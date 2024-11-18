@@ -39,7 +39,7 @@ public class DoctorController extends UserController {
                 System.out.println("6. Manage Appointment Requests");
                 System.out.println("7. View Upcoming Appointments");
                 System.out.println("8. Record Appointment Outcome");
-                System.out.println("9. Exit");
+                System.out.println("9. Log Out");
                 input = scanner.nextLine();
                 isValidSelectionType = validator.validateSelectorInput(input, 1, MAX_MENU_RANGE);
             } while (!isValidSelectionType);
