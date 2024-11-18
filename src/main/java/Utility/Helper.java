@@ -1,11 +1,19 @@
 package Utility;
 
-import Models.Doctor;
-import Models.Patient;
+import Models.*;
 
 import java.util.ArrayList;
 
 public class Helper {
+
+    public static Patient findPatient(ArrayList<Patient> patientList, String patientId){
+        for (Patient patient : patientList) {
+            if (patient.getId().equals(patientId)) {
+                return patient;
+            }
+        }
+        return null;
+    }
 
     public static Doctor findDoctor(ArrayList<Doctor> doctorList, String doctorId){
         for (Doctor doctor : doctorList) {
@@ -16,12 +24,21 @@ public class Helper {
         return null;
     }
 
-    public static Patient findPatient(ArrayList<Patient> patientList, String patientId){
-        for (Patient patient : patientList) {
-            if (patient.getId().equals(patientId)) {
-                return patient;
+    public static Pharmacist findPharmacist(ArrayList<Pharmacist> pharmacistList, String pharmacistId){
+        for (Pharmacist pharmacist : pharmacistList) {
+            if (pharmacist.getId().equals(pharmacistId)) {
+                return pharmacist;
             }
         }
         return null;
     }
+
+//    public static Administrator findAdministrator(ArrayList<Administrator> administratorList, String administratorId){
+//        for (Administrator administrator : administratorList) {
+//            if (administrator.getId().equals(administratorId)) {
+//                return administrator;
+//            }
+//        }
+//        return null;
+//    }
 }

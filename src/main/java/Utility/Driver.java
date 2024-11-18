@@ -64,7 +64,6 @@ public class Driver {
 
         // Pharmacist stuff
         MedicationInventory mi = dp.generateMedicationList(dp.readFromCSV("Medicine_List.csv"));
-        Pharmacist p = new Pharmacist("1", "Cherilyn", 'M', 69);
         PharmacistController pc = new PharmacistController(mi, doctors);
 
         // Local variables
@@ -75,15 +74,15 @@ public class Driver {
         boolean isValidInput = true;
 
         // Test login feature
-        System.out.println("Would you like to test the login/logout feature? (Y/N)");
-        do {
-            input = scanner.nextLine().trim().toUpperCase();
-            isValidInput = validator.validateCharacterInput(input);
-        } while (!isValidInput);
-
-        if (input.charAt(0) == 'Y') {
-            enableLoginFeature();
-        }
+//        System.out.println("Would you like to test the login/logout feature? (Y/N)");
+//        do {
+//            input = scanner.nextLine().trim().toUpperCase();
+//            isValidInput = validator.validateCharacterInput(input);
+//        } while (!isValidInput);
+//
+//        if (input.charAt(0) == 'Y') {
+//            enableLoginFeature();
+//        }
 
         // Main menu loop
         do {
@@ -107,7 +106,6 @@ public class Driver {
                     doctorController.displayMenu(doctors.get(0));
                     break;
                 case 3:
-                    //pc.displayMenu(p);
                     pc.displayMenu(pharmacists.get(0));
                     break;
                 case 4:
@@ -240,45 +238,45 @@ public class Driver {
     /**
      * Tests login functionality
      */
-    public void enableLoginFeature() {
-        String username, password;
-        boolean isValidLoginCredential = true;
-        boolean isLoginSuccessful = false;
-        int currentLoginTries = 0;
-        final int maxLoginTries = 5;
-        int difference;
-
-        System.out.println("Welcome to the Hospital Management System! Please input your user credentials:");
-        do {
-            do {
-                System.out.print("USERNAME: ");
-                System.out.println("(Hint: The username is User1234)");
-                username = scanner.nextLine();
-                isValidLoginCredential = validator.validateCredential(username, "username");
-            } while (!isValidLoginCredential);
-            do {
-                System.out.print("PASSWORD: ");
-                System.out.println("(Hint: The password is Pass1234)");
-                password = scanner.nextLine();
-                isValidLoginCredential = validator.validateCredential(password, "password");
-            } while (!isValidLoginCredential);
-
-            if (username.equals("User1234") && password.equals("Pass1234")) {
-                System.out.println("You have successfully authenticated, congratulations!");
-                isLoginSuccessful = true;
-            } else {
-                System.out.println("Oh snap! User login unsuccessful!");
-                currentLoginTries++;
-                difference = maxLoginTries - currentLoginTries;
-                if (difference == 0) {
-                    System.out.println("You have reached the maximum number of login attempts, sorry!");
-                    System.exit(0);
-                } else if (difference == 1) {
-                    System.out.println("Warning! " + difference + " login attempt remaining!\n");
-                } else {
-                    System.out.println(difference + " login attempts remaining!\n");
-                }
-            }
-        } while (!isLoginSuccessful);
-    }
+//    public void enableLoginFeature() {
+//        String username, password;
+//        boolean isValidLoginCredential = true;
+//        boolean isLoginSuccessful = false;
+//        int currentLoginTries = 0;
+//        final int maxLoginTries = 5;
+//        int difference;
+//
+//        System.out.println("Welcome to the Hospital Management System! Please input your user credentials:");
+//        do {
+//            do {
+//                System.out.print("USERNAME: ");
+//                System.out.println("(Hint: The username is User1234)");
+//                username = scanner.nextLine();
+//                isValidLoginCredential = validator.validateCredential(username, "username");
+//            } while (!isValidLoginCredential);
+//            do {
+//                System.out.print("PASSWORD: ");
+//                System.out.println("(Hint: The password is Pass1234)");
+//                password = scanner.nextLine();
+//                isValidLoginCredential = validator.validateCredential(password, "password");
+//            } while (!isValidLoginCredential);
+//
+//            if (username.equals("User1234") && password.equals("Pass1234")) {
+//                System.out.println("You have successfully authenticated, congratulations!");
+//                isLoginSuccessful = true;
+//            } else {
+//                System.out.println("Oh snap! User login unsuccessful!");
+//                currentLoginTries++;
+//                difference = maxLoginTries - currentLoginTries;
+//                if (difference == 0) {
+//                    System.out.println("You have reached the maximum number of login attempts, sorry!");
+//                    System.exit(0);
+//                } else if (difference == 1) {
+//                    System.out.println("Warning! " + difference + " login attempt remaining!\n");
+//                } else {
+//                    System.out.println(difference + " login attempts remaining!\n");
+//                }
+//            }
+//        } while (!isLoginSuccessful);
+//    }
 }
